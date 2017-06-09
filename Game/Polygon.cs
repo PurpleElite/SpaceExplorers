@@ -5,9 +5,9 @@ using System.Drawing;
 
 
 namespace SpaceExplorers {
-    /**
-     * Modified version of code written by Laurent Cozic, obtained from https://www.codeproject.com/Articles/15573/D-Polygon-Collision-Detection
-     */
+    /// <summary>
+    /// Modified version of code written by Laurent Cozic, obtained from https://www.codeproject.com/Articles/15573/D-Polygon-Collision-Detection
+    /// </summary>
     public class Polygon {
 
 		private List<Vector> points = new List<Vector>();

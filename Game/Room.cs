@@ -28,6 +28,7 @@ namespace SpaceExplorers
             this.yBound = yBound;
             objectList = new List<MapObject>();
             this.camera = camera;
+            camera.Bounds = new Vector2f(xBound, yBound);
         }
 
         public void Step()
@@ -56,14 +57,8 @@ namespace SpaceExplorers
             foreach (var obj in objectList)
             {
                 sprite = new Sprite(TextureLibrary.Textures[obj.GetTextureKey()]);
-                int xPosition = obj.GetXPosition() - (int)camera.Position.X;
-                int yPosition = obj.GetYPosition() - (int)camera.Position.Y;
-                //Check if the object is within camera bounds, if not don't bother rendering it
-                if (xPosition + sprite.Texture.Size.X < 0
-                    || yPosition + sprite.Texture.Size.Y < 0
-                    || xPosition > camera.Size.X
-                    || yPosition > camera.Size.Y)
-                    continue;
+                int xPosition = obj.GetXPosition();
+                int yPosition = obj.GetYPosition();
                 sprite.Position = new Vector2f(xPosition, yPosition);
                 yield return sprite;
             }

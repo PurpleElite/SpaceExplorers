@@ -1,4 +1,5 @@
 ﻿using SFML.Window;
+using SFML.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,31 +10,33 @@ namespace SpaceExplorers
 {
     class Camera
     {
-        //Camera Position
-        public Vector2f Position;
-        //Size of the window
-        public Vector2f Size;
+        //View
+        View view;
+        //Size of the containing Room
+        public Vector2f Bounds;
         //Conditions
         bool track;
         //Target of tracking
         MapObject focus;
 
-        public Camera (int x, int y, int width, int height)
+        public Camera (View view)
         {
-            Position = new Vector2f(x,y);
-            Size = new Vector2f(width, height);
+            this.view = view;
             track = false;
-        }
-
-        public Camera(int width, int height)
-        {
-            Position = new Vector2f(0,0);
-            Size = new Vector2f(width, height);
+            Bounds = new Vector2f(0, 0);
         }
 
         public void Center(int centerX, int centerY)
         {
-            Position = new Vector2f(centerX - Size.X / 2, centerY - Size.Y / 2);
+            //Check to make sure the camera doesn't go out of bounds
+            if (Bounds.X > 0)
+                if (centerX - view.Size.X / 2 < 0) centerX = (int)(view.Size.X / 2);
+                else if (centerX + view.Size.X / 2 > Bounds.X) centerX = (int)(Bounds.X - view.Size.X / 2);
+            if (Bounds.Y > 0)
+                if (centerY - view.Size.Y / 2 < 0) centerY = (int)(view.Size.Y / 2);
+                else if (centerY + view.Size.Y / 2 > Bounds.Y) centerY = (int)(Bounds.Y - view.Size.Y / 2);
+            //Center the view
+            view.Center = new Vector2f(centerX, centerY);
         }
 
         public void Set_Focus(MapObject obj)

@@ -37,13 +37,13 @@ namespace SpaceExplorers
             if (CollisionDetection)
                 collisionBounds.Offset(velocity);
             position += velocity;
+            updateVelocity();
         }
 
-        public override bool Collision_Check(MapObject obj)
+        /*public override bool Collision_Check(MapObject obj)
         {
-            updateVelocity();
             return base.Collision_Check(obj);
-        }
+        }*/
 
         // --Private Methods--
         private void updateVelocity()
