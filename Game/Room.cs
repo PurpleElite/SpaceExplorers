@@ -51,6 +51,33 @@ namespace SpaceExplorers
             camera.Step();
         }
 
+
+        internal void Use(Character user)
+        {
+            MapObject interact = null;
+            float minDistance = -1;
+            FloatRect interactArea = user.getInteractArea();
+            foreach (var obj in objectList.Where(item => item.Interactable))
+            {
+                Vector interactPoint = obj.GetInteractPoint();
+                if (interactArea.Contains(interactPoint.X, interactPoint.Y))
+                {
+                    if (interact == null)
+                    {
+                        interact = obj;
+                        minDistance = user.GetCollisionBounds().Center.DistanceTo(obj.InteractPoint);
+                    }
+                    else if (user.GetCollisionBounds().Center.DistanceTo(obj.InteractPoint) < minDistance)
+                    {
+                        interact = obj;
+                        minDistance = user.GetCollisionBounds().Center.DistanceTo(obj.InteractPoint);
+                    }
+                }
+            }
+            if (interact != null)
+                interact.Interaction(user);
+        }
+
         //Iterator for advancing steps and rendering objects in room in relation to position of camera
         public IEnumerable<Sprite> RenderList()
         {

@@ -15,6 +15,8 @@ namespace SpaceExplorers
         protected String ID;
         protected Polygon collisionBounds;
         public bool CollisionDetection = false;
+        public bool Interactable = false;
+        public Vector InteractPoint;
         public int ZLevel = 0;
         public bool LockZLevel = false;
 
@@ -61,6 +63,11 @@ namespace SpaceExplorers
             Polygon.PolygonCollisionResult result = collisionBounds.PolygonCollision(candidate, velocity);
             velocity += result.MinimumTranslationVector;
             return result.WillIntersect;
+        }
+
+        public void Interaction(Character user)
+        {
+            Console.WriteLine("Interaction with " + ID);
         }
 
         // --Getter Methods--
@@ -124,6 +131,11 @@ namespace SpaceExplorers
             return collisionBounds;
         }
 
+        public Vector GetInteractPoint()
+        {
+            return InteractPoint + position;
+        }
+
         // --Setter Methods--
         public void SetVelocity(Vector velocity)
         {
@@ -176,6 +188,12 @@ namespace SpaceExplorers
             CollisionDetection = true;
             collisionBounds = bounds;
             collisionBounds.Offset(position);
+        }
+
+        public void SetInteractPoint(int x, int y)
+        {
+            InteractPoint = new Vector(x, y);
+            Interactable = true;
         }
     }
 }

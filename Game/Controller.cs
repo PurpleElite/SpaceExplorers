@@ -14,10 +14,12 @@ namespace SpaceExplorers
         Dictionary<string, ProcessKeyDelegate> keyPressDict = new Dictionary<string, ProcessKeyDelegate>();
         Dictionary<string, ProcessKeyDelegate> keyReleaseDict = new Dictionary<string, ProcessKeyDelegate>();
         Character player = null;
+        Room activeRoom = null;
 
         //Default Controls
         public Controller()
         {
+            keyPressDict.Add("E", new ProcessKeyDelegate(Use_Pressed));
             keyPressDict.Add("W", new ProcessKeyDelegate(Up_Pressed));
             keyPressDict.Add("A", new ProcessKeyDelegate(Left_Pressed));
             keyPressDict.Add("S", new ProcessKeyDelegate(Down_Pressed));
@@ -32,6 +34,11 @@ namespace SpaceExplorers
         public void Set_Player(Character newPlayer)
         {
             player = newPlayer;
+        }
+
+        public void Set_Room(Room room)
+        {
+            activeRoom = room;
         }
 
         public void Key_Press(String key)
@@ -55,6 +62,12 @@ namespace SpaceExplorers
         }
 
         //Key Press Methods
+        private void Use_Pressed()
+        {
+            if (player != null && activeRoom != null)
+                activeRoom.Use(player);
+        }
+
         private void Up_Pressed()
         {
             if (player != null)

@@ -41,6 +41,7 @@ namespace SpaceExplorers
 
             //Create the Room
             Room defaultRoom = new Room(1000, 1000, defaultCamera);
+            controller.Set_Room(defaultRoom);
 
             //Create New MapObjects and add them to the room
             ObjectLibrary.initialize();
@@ -52,6 +53,9 @@ namespace SpaceExplorers
             defaultRoom.objectList.Add(Jacob);
             controller.Set_Player(Jacob);
             defaultCamera.Set_Focus(Jacob);
+            Character JBreech = (Character)ObjectLibrary.Objects["JBreech"];
+            JBreech.SetInteractPoint(26, 47);
+            defaultRoom.objectList.Add(JBreech);
 
             // Load in the music. Only do this once as well.
             //Sound Music = new Sound(new SoundBuffer("Sound\\blahblah.ogg"));

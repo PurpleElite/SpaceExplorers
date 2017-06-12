@@ -72,6 +72,17 @@ namespace SpaceExplorers
             Character MittensFrend = new Character("Jacob", new Vector(200, 300), new int[] { 50, 50 }, "Cpt JAstra.png", (float)2);
             MittensFrend.SetCollisionBounds(collisionBounds2);
             Objects.Add(MittensFrend.GetID(), MittensFrend);
+
+            Polygon collisionBoundsBreech = new Polygon();
+            collisionBoundsBreech.Points.Add(new Vector(20, 44));
+            collisionBoundsBreech.Points.Add(new Vector(32, 44));
+            collisionBoundsBreech.Points.Add(new Vector(32, 50));
+            collisionBoundsBreech.Points.Add(new Vector(20, 50));
+            collisionBoundsBreech.BuildEdges();
+            TextureLibrary.Textures.Add("Sgt JBreech.png", new Texture(new Image("Images\\Sgt JBreech.png")));
+            Character JBreech = new Character("JBreech", new Vector(250, 300), new int[] { 50, 50 }, "Sgt JBreech.png", (float)2);
+            JBreech.SetCollisionBounds(collisionBoundsBreech);
+            Objects.Add(JBreech.GetID(), JBreech);
         }
     }
 }

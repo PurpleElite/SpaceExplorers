@@ -18,7 +18,9 @@ namespace SpaceExplorers
         bool keyRight = false;
         Direction verticalHeading = 0;
         Direction horizontalHeading = 0;
+        Direction keyRecent = 0;
         float speed;
+        float interactSize = 50;
 
         public Character(String ID, Vector position, int[] size, String textureKey, float speed)
         {
@@ -66,14 +68,38 @@ namespace SpaceExplorers
             velocity *= speed;
         }
 
+        internal FloatRect getInteractArea()
+        {
+            FloatRect interactArea;
+            switch (keyRecent)
+            {
+                case Direction.Up:
+                    interactArea = new FloatRect(collisionBounds.Center.X - interactSize* 1.5f / 2, collisionBounds.Center.Y - interactSize, interactSize * 1.5f, interactSize);
+                    break;
+                case Direction.Down:
+                    interactArea = new FloatRect(collisionBounds.Center.X - interactSize * 1.5f / 2, collisionBounds.Center.Y, interactSize * 1.5f, interactSize);
+                    break;
+                case Direction.Left:
+                    interactArea = new FloatRect(collisionBounds.Center.X - interactSize, collisionBounds.Center.Y - interactSize * 1.5f / 2, interactSize, interactSize * 1.5f);
+                    break;
+                case Direction.Right:
+                    interactArea = new FloatRect(collisionBounds.Center.X, collisionBounds.Center.Y - interactSize * 1.5f / 2, interactSize, interactSize * 1.5f);
+                    break;
+                default:
+                    interactArea = new FloatRect();
+                    break;
+            }
+            return interactArea;
+        }
+
         //Key Presses
-        internal void Up_Pressed() { keyUp = true; verticalHeading = Direction.Up; }
+        internal void Up_Pressed() { keyUp = true; verticalHeading = Direction.Up; keyRecent = Direction.Up; }
 
-        internal void Down_Pressed() { keyDown = true; verticalHeading = Direction.Down; }
+        internal void Down_Pressed() { keyDown = true; verticalHeading = Direction.Down; keyRecent = Direction.Down; }
 
-        internal void Left_Pressed() { keyLeft = true; horizontalHeading = Direction.Left; }
+        internal void Left_Pressed() { keyLeft = true; horizontalHeading = Direction.Left; keyRecent = Direction.Left; }
 
-        internal void Right_Pressed() { keyRight = true; horizontalHeading = Direction.Right; }
+        internal void Right_Pressed() { keyRight = true; horizontalHeading = Direction.Right; keyRecent = Direction.Right;  }
 
         internal void Up_Released() { keyUp = false; if (keyDown) verticalHeading = Direction.Down; }
 
