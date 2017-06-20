@@ -13,7 +13,7 @@ namespace SpaceExplorers
 
         Dictionary<string, ProcessKeyDelegate> keyPressDict = new Dictionary<string, ProcessKeyDelegate>();
         Dictionary<string, ProcessKeyDelegate> keyReleaseDict = new Dictionary<string, ProcessKeyDelegate>();
-        Character player = null;
+        IControllable control = null;
         Room activeRoom = null;
 
         //Default Controls
@@ -31,9 +31,9 @@ namespace SpaceExplorers
         }
 
         //Public Methods
-        public void Set_Player(Character newPlayer)
+        public void Set_Control(IControllable newControl)
         {
-            player = newPlayer;
+            control = newControl;
         }
 
         public void Set_Room(Room room)
@@ -64,56 +64,56 @@ namespace SpaceExplorers
         //Key Press Methods
         private void Use_Pressed()
         {
-            if (player != null && activeRoom != null)
-                activeRoom.Use(player);
+            if (control != null && activeRoom != null)
+                control.Use_Pressed();
         }
 
         private void Up_Pressed()
         {
-            if (player != null)
-                player.Up_Pressed();
+            if (control != null)
+                control.Up_Pressed();
         }
 
         private void Down_Pressed()
         {
-            if (player != null)
-                player.Down_Pressed();
+            if (control != null)
+                control.Down_Pressed();
         }
 
         private void Left_Pressed()
         {
-            if (player != null)
-                player.Left_Pressed();
+            if (control != null)
+                control.Left_Pressed();
         }
 
         private void Right_Pressed()
         {
-            if (player != null)
-                player.Right_Pressed();
+            if (control != null)
+                control.Right_Pressed();
         }
 
         private void Up_Released()
         {
-            if (player != null)
-                player.Up_Released();
+            if (control != null)
+                control.Up_Released();
         }
 
         private void Down_Released()
         {
-            if (player != null)
-                player.Down_Released();
+            if (control != null)
+                control.Down_Released();
         }
 
         private void Left_Released()
         {
-            if (player != null)
-                player.Left_Released();
+            if (control != null)
+                control.Left_Released();
         }
 
         private void Right_Released()
         {
-            if (player != null)
-                player.Right_Released();
+            if (control != null)
+                control.Right_Released();
         }
     }
 }

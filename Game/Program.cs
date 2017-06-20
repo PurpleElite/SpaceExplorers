@@ -14,12 +14,16 @@ namespace SpaceExplorers
     class Program
     {
         //Controller to track key bindings and inputs
-        static Controller controller = new Controller();
+        public static Controller controller = new Controller();
+        static Vector2u windowDim = new Vector2u(960, 540);
+        public static Room ActiveRoom;
+        public static Hud ActiveHud;
+        public static DialogueEngine DialogueEngine;
 
         static void Main(string[] args)
         {
             // Create the application window.
-            RenderWindow window = new RenderWindow(new VideoMode(960, 540), "Space Explorers");
+            RenderWindow window = new RenderWindow(new VideoMode(windowDim.X, windowDim.Y), "Space Explorers");
 
             // Here we assign a callback to the window close button.
             window.Closed += Window_Closed;
@@ -34,28 +38,31 @@ namespace SpaceExplorers
             window.SetFramerateLimit(60);
 
             //Create the View
-            View defaultView = new View(new Vector2f(960, 540), new Vector2f(960, 540));
-            //defaultView.Size = new Vector2f(960, 540);
+            View defaultView = new View(new Vector2f(windowDim.X, windowDim.Y), new Vector2f(windowDim.X, windowDim.Y));
             defaultView.Zoom(0.5f);
             Camera defaultCamera = new Camera(defaultView);
 
             //Create the Room
-            Room defaultRoom = new Room(1000, 1000, defaultCamera);
-            controller.Set_Room(defaultRoom);
+            ActiveRoom = new Room(1000, 1000, defaultCamera);
+            controller.Set_Room(ActiveRoom);
 
-            //Create New MapObjects and add them to the room
-            ObjectLibrary.initialize();
-            defaultRoom.objectList.Add(ObjectLibrary.Objects["Background"]);
-            defaultRoom.objectList.Add(ObjectLibrary.Objects["DebugBox"]);
-            defaultRoom.objectList.Add(ObjectLibrary.Objects["DebugCube"]);
-            defaultRoom.objectList.Add(ObjectLibrary.Objects["DebugAngleCube"]);
-            Character Jacob = (Character)ObjectLibrary.Objects["Jacob"];
-            defaultRoom.objectList.Add(Jacob);
-            controller.Set_Player(Jacob);
+            //Create the Hud
+            ActiveHud = new Hud(windowDim);
+
+            //Create New Mapentitys and add them to the room
+            EntityLibrary.Initialize();
+            ActiveRoom.entityList.Add((RoomEntity) EntityLibrary.Entities["Background"]);
+            ActiveRoom.entityList.Add((RoomEntity)EntityLibrary.Entities["DebugBox"]);
+            ActiveRoom.entityList.Add((RoomEntity)EntityLibrary.Entities["DebugCube"]);
+            ActiveRoom.entityList.Add((RoomEntity)EntityLibrary.Entities["DebugAngleCube"]);
+            Actor Jacob = (Actor)EntityLibrary.Entities["Jacob"];
+            ActiveRoom.entityList.Add(Jacob);
+            controller.Set_Control(Jacob);
             defaultCamera.Set_Focus(Jacob);
-            Character JBreech = (Character)ObjectLibrary.Objects["JBreech"];
-            JBreech.SetInteractPoint(26, 47);
-            defaultRoom.objectList.Add(JBreech);
+            Actor JBreech = (Actor)EntityLibrary.Entities["JBreech"];
+            Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue(char1, char2);
+            JBreech.InitializeInteraction(26, 47, dialogue);
+            ActiveRoom.entityList.Add(JBreech);
 
             // Load in the music. Only do this once as well.
             //Sound Music = new Sound(new SoundBuffer("Sound\\blahblah.ogg"));
@@ -74,15 +81,21 @@ namespace SpaceExplorers
                 // Get the position of the mouse pointer.
                 //Vector2i mousePosition = window.InternalGetMousePosition();
 
-                // Here we iterate through the contents of objectList and update/draw them
-                defaultRoom.Step();
+                // Here we iterate through the contents of the room and the hud and update/draw them
+                ActiveRoom.Step();
                 window.SetView(defaultView);
-                foreach (Sprite sprite in defaultRoom.RenderList())
+                foreach (Sprite sprite in ActiveRoom.RenderList())
                 {
                     if (sprite != null)
                     {
-                        //sprite.Position = sprite.Position * 2 - defaultCamera.Size/2;
-                        //sprite.Scale = new Vector2f(2,2);
+                        window.Draw(sprite);
+                    }
+                }
+                foreach (Sprite sprite in ActiveHud.RenderList())
+                {
+                    if (sprite != null)
+                    {
+                        sprite.Position += window.GetView().Center - window.GetView().Size/2;
                         window.Draw(sprite);
                     }
                 }
@@ -94,17 +107,17 @@ namespace SpaceExplorers
             return;
         }
 
-        private static void Window_KeyReleased(object sender, KeyEventArgs e)
+        private static void Window_KeyReleased(Object sender, KeyEventArgs e)
         {
             controller.Key_Release(e.Code.ToString());
         }
 
-        private static void Window_KeyPressed(object sender, KeyEventArgs e)
+        private static void Window_KeyPressed(Object sender, KeyEventArgs e)
         {
             controller.Key_Press(e.Code.ToString());
         }
 
-        private static void Window_Closed(object sender, EventArgs e)
+        private static void Window_Closed(Object sender, EventArgs e)
         {
             ((Window)sender).Close();
         }

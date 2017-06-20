@@ -11,7 +11,7 @@ namespace SpaceExplorers
     class Room
     {
         //List of objects in the room
-        public List<MapObject> objectList;
+        public List<RoomEntity> entityList;
 
         //Room Bounds
         int xBound;
@@ -19,75 +19,76 @@ namespace SpaceExplorers
 
         Camera camera;
 
-        //Sprite for handing off objects to be rendered
-        Sprite sprite;
-
         public Room(int xBound, int yBound, Camera camera)
         {
             this.xBound = xBound;
             this.yBound = yBound;
-            objectList = new List<MapObject>();
+            entityList = new List<RoomEntity>();
             this.camera = camera;
             camera.Bounds = new Vector2f(xBound, yBound);
         }
 
         public void Step()
         {
-            foreach (var obj in objectList)
+            foreach (var ent in entityList)
             {
-                if (obj.CollisionDetection)
+                if (ent.CollisionDetection)
                 {
-                    foreach (var collideCandidate in objectList.Where(item => item != obj))
+                    foreach (var collideCandidate in entityList.Where(item => item != ent))
                     {
                         if (collideCandidate.CollisionDetection)
                         {
-                            obj.Collision_Check(collideCandidate);
+                            ent.Collision_Check(collideCandidate);
                         }
                     }
                 }
-                obj.Step();
+                ent.Step();
             }
-            objectList = objectList.OrderBy(MapObject => MapObject.ZLevel).ToList();
+            entityList = entityList.OrderBy(MapEntity => MapEntity.ZLevel).ToList();
             camera.Step();
         }
 
 
-        internal void Use(Character user)
+        internal void Use(Actor user)
         {
-            MapObject interact = null;
+            RoomEntity target = null;
             float minDistance = -1;
             FloatRect interactArea = user.getInteractArea();
-            foreach (var obj in objectList.Where(item => item.Interactable))
+            foreach (var ent in entityList.Where(item => item.Interactable))
             {
-                Vector interactPoint = obj.GetInteractPoint();
+                Vector interactPoint = ent.GetInteractPoint();
                 if (interactArea.Contains(interactPoint.X, interactPoint.Y))
                 {
-                    if (interact == null)
+                    if (target == null)
                     {
-                        interact = obj;
-                        minDistance = user.GetCollisionBounds().Center.DistanceTo(obj.InteractPoint);
+                        target = ent;
+                        minDistance = user.GetCollisionBounds().Center.DistanceTo(ent.InteractPoint);
                     }
-                    else if (user.GetCollisionBounds().Center.DistanceTo(obj.InteractPoint) < minDistance)
+                    else if (user.GetCollisionBounds().Center.DistanceTo(ent.InteractPoint) < minDistance)
                     {
-                        interact = obj;
-                        minDistance = user.GetCollisionBounds().Center.DistanceTo(obj.InteractPoint);
+                        target = ent;
+                        minDistance = user.GetCollisionBounds().Center.DistanceTo(ent.InteractPoint);
                     }
                 }
             }
-            if (interact != null)
-                interact.Interaction(user);
+            if (target != null)
+                target.Interaction(user);
         }
 
         //Iterator for advancing steps and rendering objects in room in relation to position of camera
-        public IEnumerable<Sprite> RenderList()
+        public IEnumerable<Drawable> RenderList()
         {
-            foreach (var obj in objectList)
+            Sprite sprite;
+            if (entityList.Count > 0)
             {
-                sprite = new Sprite(TextureLibrary.Textures[obj.GetTextureKey()]);
-                int xPosition = obj.GetXPosition();
-                int yPosition = obj.GetYPosition();
-                sprite.Position = new Vector2f(xPosition, yPosition);
-                yield return sprite;
+                foreach (var ent in entityList)
+                {
+                    sprite = new Sprite(TextureLibrary.Textures[ent.GetTextureKey()]);
+                    int xPosition = ent.GetXPosition();
+                    int yPosition = ent.GetYPosition();
+                    sprite.Position = new Vector2f(xPosition, yPosition);
+                    yield return sprite;
+                }
             }
             yield return null;
         }

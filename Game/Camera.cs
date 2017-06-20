@@ -17,7 +17,7 @@ namespace SpaceExplorers
         //Conditions
         bool track;
         //Target of tracking
-        MapObject focus;
+        RoomEntity focus;
 
         public Camera (View view)
         {
@@ -39,7 +39,7 @@ namespace SpaceExplorers
             view.Center = new Vector2f(centerX, centerY);
         }
 
-        public void Set_Focus(MapObject obj)
+        public void Set_Focus(RoomEntity obj)
         {
             track = true;
             focus = obj;

@@ -8,7 +8,7 @@ using SFML.Window;
 
 namespace SpaceExplorers
 {
-    public class Character : MapObject
+    public class Actor : RoomEntity, IControllable
     {
         enum Direction : byte { Down, Up, Left, Right };
 
@@ -21,14 +21,16 @@ namespace SpaceExplorers
         Direction keyRecent = 0;
         float speed;
         float interactSize = 50;
+        String portraitKey;
 
-        public Character(String ID, Vector position, int[] size, String textureKey, float speed)
+        public Actor(string ID, Vector position, int[] size, string textureKey, string portraitKey, float speed)
         {
             this.ID = ID;
             this.position = position;
+            this.size = size;
             velocity = new Vector(0, 0);
             this.textureKey = textureKey;
-            this.size = size;
+            this.portraitKey = portraitKey;
             this.speed = speed;
         }
 
@@ -93,20 +95,27 @@ namespace SpaceExplorers
         }
 
         //Key Presses
-        internal void Up_Pressed() { keyUp = true; verticalHeading = Direction.Up; keyRecent = Direction.Up; }
+        public void Up_Pressed() { keyUp = true; verticalHeading = Direction.Up; keyRecent = Direction.Up; }
 
-        internal void Down_Pressed() { keyDown = true; verticalHeading = Direction.Down; keyRecent = Direction.Down; }
+        public void Down_Pressed() { keyDown = true; verticalHeading = Direction.Down; keyRecent = Direction.Down; }
 
-        internal void Left_Pressed() { keyLeft = true; horizontalHeading = Direction.Left; keyRecent = Direction.Left; }
+        public void Left_Pressed() { keyLeft = true; horizontalHeading = Direction.Left; keyRecent = Direction.Left; }
 
-        internal void Right_Pressed() { keyRight = true; horizontalHeading = Direction.Right; keyRecent = Direction.Right;  }
+        public void Right_Pressed() { keyRight = true; horizontalHeading = Direction.Right; keyRecent = Direction.Right;  }
 
-        internal void Up_Released() { keyUp = false; if (keyDown) verticalHeading = Direction.Down; }
+        public void Up_Released() { keyUp = false; if (keyDown) verticalHeading = Direction.Down; }
 
-        internal void Down_Released() { keyDown = false; if (keyUp) verticalHeading = Direction.Up; }
+        public void Down_Released() { keyDown = false; if (keyUp) verticalHeading = Direction.Up; }
 
-        internal void Left_Released() { keyLeft = false; if (keyRight) horizontalHeading = Direction.Right; }
+        public void Left_Released() { keyLeft = false; if (keyRight) horizontalHeading = Direction.Right; }
 
-        internal void Right_Released() { keyRight = false; if (keyLeft) horizontalHeading = Direction.Left; }
+        public void Right_Released() { keyRight = false; if (keyLeft) horizontalHeading = Direction.Left; }
+
+        public void Use_Pressed() { Program.ActiveRoom.Use(this); }
+
+        public void Use_Released()
+        {
+            // Do nothing
+        }
     }
 }

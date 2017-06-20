@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using SFML.Graphics;
 
 namespace SpaceExplorers
 {
-    static class TextureLibrary
+    class TextEntity
     {
-        public static Dictionary<string, Texture> Textures = new Dictionary<string, Texture>();
     }
 }
