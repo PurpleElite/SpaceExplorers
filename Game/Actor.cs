@@ -8,7 +8,7 @@ using SFML.Window;
 
 namespace SpaceExplorers
 {
-    public class Actor : RoomEntity, IControllable
+    class Actor : RoomEntity, IControllable
     {
         enum Direction : byte { Down, Up, Left, Right };
 

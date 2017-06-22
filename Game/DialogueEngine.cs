@@ -6,6 +6,12 @@ namespace SpaceExplorers
     {
         Dialogue dialogue;
         MenuDialogue dialogueBox;
+        DialogueLine currentLine;
+
+        public DialogueEngine()
+        {
+            // WIP
+        }
 
         public void RunDialogue(Entity player, Entity npc)
         {
@@ -14,17 +20,21 @@ namespace SpaceExplorers
             Program.ActiveHud.entityList.Add(dialogueBox);
             Program.controller.Set_Control(dialogueBox);
             dialogue = DialogueLibrary.Dialogues[new DialogueLibrary.DialogueKey(player, npc)];
-            dialogue.initialize();
+            dialogue.Initialize();
             Forward();
         }
 
         public void Forward()
         {
             Console.WriteLine("Forward");
-            Dialogue.DialogueLine line = dialogue.NextLine();
-            if (!line.end)
+            if (!currentLine.end)
             {
-                dialogueBox.display(line);
+                currentLine = dialogue.NextLine();
+                dialogueBox.Display(currentLine);
+            }
+            else
+            {
+                dialogueBox.Destroy();
             }
         }
     }

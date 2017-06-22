@@ -13,7 +13,9 @@ namespace SpaceExplorers
         // --Constructors--
         public MenuDialogue(string ID, Vector position, int[] size, string textureKey) : base(ID, position, size, textureKey)
         {
-            text = new TextBox(ID + "TextBox", position, new int[] { 290, 40 }, FontLibrary.Fonts["Arial"], 12);
+            text = new TextBox(ID + "TextBox", position, new int[] { 290, 40 }, FontLibrary.Fonts["VCROSDMono"], 21);
+            text.SetColor(74, 193, 255, 255);
+            text.SetZLevel(ZLevel + 1);
             Program.ActiveHud.entityList.Add(text);
         }
 
@@ -28,10 +30,10 @@ namespace SpaceExplorers
 
         }
 
-        internal void display(Dialogue.DialogueLine line)
+        internal void Display(DialogueLine line)
         {
-            text.DisplayedString = line.text;
-            text.Position = new Vector2f(position.X + 10, position.Y + 55);
+            text.SetText(line.text);
+            text.SetPosition(new Vector(position.X + 10, position.Y + 55));
         }
 
         public void Up_Pressed() {  }
@@ -39,6 +41,11 @@ namespace SpaceExplorers
         public void Down_Pressed() {  }
 
         public void Left_Pressed() {  }
+
+        internal void Destroy()
+        {
+            throw new NotImplementedException();
+        }
 
         public void Right_Pressed() {  }
 

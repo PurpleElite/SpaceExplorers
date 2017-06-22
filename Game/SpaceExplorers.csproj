@@ -105,6 +105,7 @@
     <Compile Include="HudEntity.cs" />
     <Compile Include="EntityLibrary.cs" />
     <Compile Include="Controller.cs" />
+    <Compile Include="IRenderable.cs" />
     <Compile Include="MenuDialogue.cs" />
     <Compile Include="RoomEntity.cs" />
     <Compile Include="Polygon.cs" />
@@ -112,22 +113,41 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Room.cs" />
     <Compile Include="TextBox.cs" />
-    <Compile Include="TextEntity.cs" />
-    <Compile Include="TextureEntity.cs" />
     <Compile Include="TextureLibrary.cs" />
     <Compile Include="Vector.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="Fonts\ARIAL.TTF" />
-    <None Include="Fonts\ARIALBD.TTF" />
-    <None Include="Fonts\ARIALBI.TTF" />
-    <None Include="Fonts\ARIALI.TTF" />
-    <None Include="Fonts\ARIALN.TTF" />
-    <None Include="Fonts\ARIALNB.TTF" />
-    <None Include="Fonts\ARIALNBI.TTF" />
-    <None Include="Fonts\ARIALNI.TTF" />
-    <None Include="Fonts\ARIBLK.TTF" />
+    <None Include="Fonts\ARIAL.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALBD.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALBI.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALI.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALN.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALNB.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALNBI.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIALNI.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\ARIBLK.TTF">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Fonts\VCR_OSD_MONO_1.001.ttf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Sound\blahblah.ogg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -22,6 +22,13 @@ namespace SpaceExplorers
 
         static void Main(string[] args)
         {
+            //Initalize Fonts
+            FontLibrary.Initialize();
+
+            //Create Dialogue Engine
+            DialogueEngine = new DialogueEngine();
+            DialogueLibrary.Initialize();
+
             // Create the application window.
             RenderWindow window = new RenderWindow(new VideoMode(windowDim.X, windowDim.Y), "Space Explorers");
 
@@ -83,20 +90,27 @@ namespace SpaceExplorers
 
                 // Here we iterate through the contents of the room and the hud and update/draw them
                 ActiveRoom.Step();
+                ActiveHud.Step();
                 window.SetView(defaultView);
-                foreach (Sprite sprite in ActiveRoom.RenderList())
+                foreach (Renderable renderable in ActiveRoom.RenderList())
                 {
-                    if (sprite != null)
-                    {
-                        window.Draw(sprite);
-                    }
+                    if (renderable.sprite != null)
+                        window.Draw(renderable.sprite);
+                    else if (renderable.text != null)
+                        window.Draw(renderable.text);
                 }
-                foreach (Sprite sprite in ActiveHud.RenderList())
+                foreach (Renderable renderable in ActiveHud.RenderList())
                 {
-                    if (sprite != null)
+                    if (renderable.sprite != null)
                     {
-                        sprite.Position += window.GetView().Center - window.GetView().Size/2;
-                        window.Draw(sprite);
+                        renderable.sprite.Position += window.GetView().Center - window.GetView().Size/2;
+                        window.Draw(renderable.sprite);
+                    }
+                    else if (renderable.text != null)
+                    {
+                        renderable.text.Position += window.GetView().Center - window.GetView().Size / 2;
+                        window.Draw(renderable.text);
+                        renderable.text.Position -= window.GetView().Center - window.GetView().Size / 2;
                     }
                 }
 

@@ -6,33 +6,42 @@ using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
+    public struct DialogueLine
+    {
+        public int index;
+        public string text;
+        public bool choice;
+        public bool end;
+
+        public DialogueLine(int index, string text, bool choice, bool end)
+        {
+            this.index = index;
+            this.text = text;
+            this.choice = choice;
+            this.end = end;
+        }
+    }
+
     class Dialogue
     {
-        public struct DialogueLine
-        {
-            public string text;
-            public bool choice;
-            public bool end;
+        int index;
+        public List<DialogueLine> Lines = new List<DialogueLine>();
+        public DialogueLibrary.DialogueKey ID;
 
-            public DialogueLine(string text, bool choice, bool end)
-            {
-                this.text = text;
-                this.choice = choice;
-                this.end = end;
-            }
+        public Dialogue(DialogueLibrary.DialogueKey ID)
+        {
+            this.ID = ID;
         }
 
-        int index;
-        List<DialogueLine> dialogue = new List<DialogueLine>();
-
-        internal void initialize()
+        internal void Initialize()
         {
             index = 0;
+            Lines = Lines.OrderBy(DialogueLine => DialogueLine.index).ToList();
         }
 
         internal DialogueLine NextLine()
         {
-            DialogueLine line = dialogue[index];
+            DialogueLine line = Lines[index];
             index++;
             return line;
         }

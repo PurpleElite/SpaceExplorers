@@ -15,6 +15,8 @@ namespace SpaceExplorers
         {
             Font arial = new Font("Fonts\\ARIAL.TTF");
             Fonts.Add("Arial", arial);
+            Font VCROSDMono = new Font("Fonts\\VCR_OSD_MONO_1.001.ttf");
+            Fonts.Add("VCROSDMono", VCROSDMono);
         }
     }
 }

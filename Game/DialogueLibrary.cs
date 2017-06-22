@@ -10,10 +10,16 @@ namespace SpaceExplorers
     {
         public struct DialogueKey
         {
-            public Entity initiator;
-            public Entity target;
+            public string initiator;
+            public string target;
 
             public DialogueKey(Entity initiator, Entity target)
+            {
+                this.initiator = initiator.GetID();
+                this.target = target.GetID();
+            }
+
+            public DialogueKey(string initiator, string target)
             {
                 this.initiator = initiator;
                 this.target = target;
@@ -24,7 +30,11 @@ namespace SpaceExplorers
 
         public static void Initialize()
         {
-
+            Dialogue test = new Dialogue(new DialogueKey ("Jacob", "JBreech"));
+            test.Lines.Add(new DialogueLine(0, "Test1", false, false));
+            test.Lines.Add(new DialogueLine(1, "Test2", false, false));
+            test.Lines.Add(new DialogueLine(2, "Test3", false, true));
+            Dialogues.Add(test.ID, test);
         }
     }
 }
