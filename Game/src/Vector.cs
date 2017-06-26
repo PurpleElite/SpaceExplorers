@@ -18,8 +18,8 @@ namespace SpaceExplorers
 		}
 
 		public Vector(float x, float y) {
-			this.X = x;
-			this.Y = y;
+			X = x;
+			Y = y;
 		}
 
 		public float Magnitude {

@@ -8,17 +8,19 @@ namespace SpaceExplorers
 {
     public struct DialogueLine
     {
+        public Actor speaker;
         public int index;
         public string text;
         public bool choice;
         public bool end;
 
-        public DialogueLine(int index, string text, bool choice, bool end)
+        public DialogueLine(int index, string text, bool choice, bool end, Actor speaker)
         {
             this.index = index;
             this.text = text;
             this.choice = choice;
             this.end = end;
+            this.speaker = speaker;
         }
     }
 

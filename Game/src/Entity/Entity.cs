@@ -9,55 +9,63 @@ namespace SpaceExplorers
 {
     public class Entity
     {
-        protected Vector position;
-        protected int[] size;
-        protected string ID;
+        public Vector Position;
+        public Vector Size;
+        public string ID;
         public bool Interactable = false;
         public Vector InteractPoint;
         public Action<Entity, Entity> InteractAction;
         public int ZLevel = 0;
+        public int CopyNum = 0;
 
         // Constructors
 
-        public Entity(string ID, Vector position, int[] size)
+        public Entity(string ID, Vector size)
         {
             this.ID = ID;
-            this.position = position;
-            this.size = size;
+            Position = new Vector(0, 0);
+            Size = size;
         }
 
         public Entity()
         {
             ID = "Default";
-            position = new Vector (0, 0);
-            size = new int[]{ 0, 0 };
+            Position = new Vector (0, 0);
+            Size = new Vector(0, 0);
+        }
+
+        public void InitializeInteraction(Vector location, Action<Entity, Entity> action)
+        {
+            InteractPoint = location;
+            InteractAction = action;
+            Interactable = true;
         }
 
         // Getter Methods
 
         public virtual Vector GetPosition()
         {
-            return position;
+            return Position;
         }
 
         public virtual int GetXPosition()
         {
-            return (int)position.X;
+            return (int)Position.X;
         }
 
         public virtual int GetYPosition()
         {
-            return (int)position.Y;
+            return (int)Position.Y;
         }
 
         public virtual int GetWidth()
         {
-            return size[0];
+            return (int) Size.X;
         }
 
         public virtual int GetHeight()
         {
-            return size[1];
+            return (int) Size.Y;
         }
 
         public virtual int GetZLevel()
@@ -74,17 +82,7 @@ namespace SpaceExplorers
 
         public virtual void SetPosition(Vector position)
         {
-            this.position = position;
-        }
-
-        public virtual void SetXPosition(float xPosition)
-        {
-            position.X = xPosition;
-        }
-
-        public virtual void SetYPosition(float yPosition)
-        {
-            position.Y = yPosition;
+            Position = position;
         }
 
         public virtual void SetZLevel(int z)

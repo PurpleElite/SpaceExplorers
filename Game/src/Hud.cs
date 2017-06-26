@@ -11,30 +11,30 @@ namespace SpaceExplorers
     internal class Hud
     {
         //List of objects in the HUD
-        public List<HudEntity> entityList;
+        public List<HudEntity> EntityList;
 
         private Vector2u windowDim;
 
         public Hud(Vector2u windowDim)
         {
             this.windowDim = windowDim;
-            entityList = new List<HudEntity>();
+            EntityList = new List<HudEntity>();
         }
 
         public void Step()
         {
-            foreach (var ent in entityList)
+            foreach (var ent in EntityList)
             {
                 ent.Step();
             }
-            entityList = entityList.OrderBy(HudEntity => HudEntity.ZLevel).ToList();
+            EntityList = EntityList.OrderBy(HudEntity => HudEntity.ZLevel).ToList();
         }
 
         public IEnumerable<Renderable> RenderList()
         {
-            if (entityList.Count > 0)
+            if (EntityList.Count > 0)
             {
-                foreach (var ent in entityList)
+                foreach (var ent in EntityList)
                 {
                     yield return ent.Draw();
                 }

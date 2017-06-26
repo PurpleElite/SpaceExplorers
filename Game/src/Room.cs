@@ -11,7 +11,7 @@ namespace SpaceExplorers
     class Room
     {
         //List of objects in the room
-        public List<RoomEntity> entityList;
+        public List<RoomEntity> EntityList;
 
         //Room Bounds
         int xBound;
@@ -23,18 +23,18 @@ namespace SpaceExplorers
         {
             this.xBound = xBound;
             this.yBound = yBound;
-            entityList = new List<RoomEntity>();
+            EntityList = new List<RoomEntity>();
             this.camera = camera;
             camera.Bounds = new Vector2f(xBound, yBound);
         }
 
         public void Step()
         {
-            foreach (var ent in entityList)
+            foreach (var ent in EntityList)
             {
                 if (ent.CollisionDetection)
                 {
-                    foreach (var collideCandidate in entityList.Where(item => item != ent))
+                    foreach (var collideCandidate in EntityList.Where(item => item != ent))
                     {
                         if (collideCandidate.CollisionDetection)
                         {
@@ -44,7 +44,7 @@ namespace SpaceExplorers
                 }
                 ent.Step();
             }
-            entityList = entityList.OrderBy(MapEntity => MapEntity.ZLevel).ToList();
+            EntityList = EntityList.OrderBy(MapEntity => MapEntity.ZLevel).ToList();
             camera.Step();
         }
 
@@ -54,7 +54,7 @@ namespace SpaceExplorers
             RoomEntity target = null;
             float minDistance = -1;
             FloatRect interactArea = user.getInteractArea();
-            foreach (var ent in entityList.Where(item => item.Interactable))
+            foreach (var ent in EntityList.Where(item => item.Interactable))
             {
                 Vector interactPoint = ent.GetInteractPoint();
                 if (interactArea.Contains(interactPoint.X, interactPoint.Y))
@@ -77,9 +77,9 @@ namespace SpaceExplorers
 
         public IEnumerable<Renderable> RenderList()
         {
-            if (entityList.Count > 0)
+            if (EntityList.Count > 0)
             {
-                foreach (var ent in entityList)
+                foreach (var ent in EntityList)
                 {
                     yield return ent.Draw();
                 }

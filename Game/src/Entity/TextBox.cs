@@ -12,13 +12,13 @@ namespace SpaceExplorers
         Text text;
 
         // --Constructors--
-        public TextBox(string ID, Vector position, int[] size, Font font, uint charSize) : base(ID, position, size, null)
+        public TextBox(string ID, Vector size, Font font, uint charSize) : base(ID, size, null)
         {
             text = new Text()
             {
                 Font = font,
                 CharacterSize = charSize,
-                Position = new Vector2f(position.X, position.Y)
+                Position = new Vector2f(0, 0)
             };
             text.Scale = new Vector2f(0.5f, 0.5f);
         }
@@ -46,8 +46,8 @@ namespace SpaceExplorers
 
         public override void SetPosition(Vector pos)
         {
-            position = pos;
-            text.Position = new Vector2f(position.X, position.Y);
+            Position = pos;
+            text.Position = new Vector2f(Position.X, Position.Y);
         }
     }
 }

@@ -4,10 +4,10 @@ namespace SpaceExplorers
 {
     class HudEntity : Entity, IRenderable
     {
-        string textureKey;
+        public string textureKey;
 
         // --Constructors--
-        public HudEntity(string ID, Vector position, int[] size, string textureKey) : base(ID, position, size)
+        public HudEntity(string ID, Vector  size, string textureKey) : base(ID, size)
         {
             this.textureKey = textureKey;
         }
@@ -21,6 +21,11 @@ namespace SpaceExplorers
         public virtual void Step()
         {
             
+        }
+
+        public virtual void Destroy()
+        {
+            Program.ActiveHud.EntityList.Remove(this);
         }
 
         public virtual Renderable Draw()

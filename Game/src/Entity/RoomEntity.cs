@@ -7,57 +7,48 @@ using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
-    class RoomEntity : Entity, IRenderable
+    public class RoomEntity : Entity, IRenderable
     {
-        protected Vector velocity;
+        public Vector Velocity = new Vector(0, 0);
         
         protected Polygon collisionBounds;
         public bool CollisionDetection = false;
         public bool LockZLevel = false;
-        public string textureKey;
+        public string TextureKey;
 
         // --Constructors--
-        public RoomEntity(string ID, Vector velocity, Vector position, int[] size, string textureKey) : base(ID, position, size)
-        {
-            this.velocity = velocity;
-            this.textureKey = textureKey;
-        }
 
-        public RoomEntity(string ID, Vector position, int[] size, string textureKey) : base(ID, position, size)
+        public RoomEntity(string ID, Vector size, string textureKey) : base(ID, size)
         {
-            velocity = new Vector(0, 0);
-            this.textureKey = textureKey;
+            TextureKey = textureKey;
         }
 
         public RoomEntity() : base()
         {
-            velocity = new Vector(0, 0);
-            textureKey = null;
+            TextureKey = null;
         }
 
         // --Public Methods--
         public virtual void Step()
         {
             if (!LockZLevel)
-                ZLevel = (int)position.Y + size[1];
+                ZLevel = (int)(Position.Y + Size.Y);
             if (CollisionDetection)
-                collisionBounds.Offset(velocity);
-            position += velocity;
+                collisionBounds.Offset(Velocity);
+            Position += Velocity;
+        }
+
+        public virtual void Destroy()
+        {
+            Program.ActiveRoom.EntityList.Remove(this);
         }
 
         public virtual bool Collision_Check(RoomEntity obj)
         {
             Polygon candidate = obj.GetCollisionBounds();
-            Polygon.PolygonCollisionResult result = collisionBounds.PolygonCollision(candidate, velocity);
-            velocity += result.MinimumTranslationVector;
+            Polygon.PolygonCollisionResult result = collisionBounds.PolygonCollision(candidate, Velocity);
+            Velocity += result.MinimumTranslationVector;
             return result.WillIntersect;
-        }
-
-        public void InitializeInteraction(int x, int y, Action<Entity, Entity> action)
-        {
-            InteractPoint = new Vector(x, y);
-            InteractAction = action;
-            Interactable = true;
         }
 
         public void Interaction(Actor user)
@@ -68,9 +59,9 @@ namespace SpaceExplorers
 
         public virtual Renderable Draw()
         {
-            if (textureKey != null)
+            if (TextureKey != null)
             {
-                Sprite sprite = new Sprite(TextureLibrary.Textures[textureKey]);
+                Sprite sprite = new Sprite(TextureLibrary.Textures[TextureKey]);
                 sprite.Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition());
                 return new Renderable(sprite);
             }
@@ -80,17 +71,17 @@ namespace SpaceExplorers
         // --Getter Methods--
         public Vector GetVelocity()
         {
-            return velocity;
+            return Velocity;
         }
 
         public float GetXVelocity()
         {
-            return velocity.X;
+            return Velocity.X;
         }
 
         public float GetYVelocity()
         {
-            return velocity.Y;
+            return Velocity.Y;
         }
 
         public Polygon GetCollisionBounds()
@@ -100,23 +91,31 @@ namespace SpaceExplorers
 
         public Vector GetInteractPoint()
         {
-            return InteractPoint + position;
+            return InteractPoint + Position;
         }
 
         // --Setter Methods--
+        public override void SetPosition(Vector position)
+        {
+            Vector difference = position - Position;
+            if (CollisionDetection)
+                collisionBounds.Offset(difference);
+            base.SetPosition(position);
+        }
+
         public void SetVelocity(Vector velocity)
         {
-            this.velocity = velocity;
+            Velocity = velocity;
         }
 
         public void SetXVelocity(float xVelocity)
         {
-            velocity.X = xVelocity;
+            Velocity.X = xVelocity;
         }
 
         public void SetYVelocity(float yVelocity)
         {
-            velocity.Y = yVelocity;
+            Velocity.Y = yVelocity;
         }
 
         public override void SetZLevel(int z)
@@ -129,7 +128,7 @@ namespace SpaceExplorers
         {
             CollisionDetection = true;
             collisionBounds = bounds;
-            collisionBounds.Offset(position);
+            collisionBounds.Offset(Position);
         }
     }
 }

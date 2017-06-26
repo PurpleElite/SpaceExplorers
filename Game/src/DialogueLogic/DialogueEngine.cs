@@ -16,8 +16,9 @@ namespace SpaceExplorers
         public void RunDialogue(Entity player, Entity npc)
         {
             Console.WriteLine("RunDialogue");
-            dialogueBox = (MenuDialogue)EntityLibrary.Entities["DialogueBox"];
-            Program.ActiveHud.entityList.Add(dialogueBox);
+            dialogueBox = (MenuDialogue)EntityLibrary.Create("DialogueBox", new Vector(90, 200));
+            dialogueBox.Initialize();
+            Program.ActiveHud.EntityList.Add(dialogueBox);
             Program.controller.Set_Control(dialogueBox);
             dialogue = DialogueLibrary.Dialogues[new DialogueLibrary.DialogueKey(player, npc)];
             dialogue.Initialize();
@@ -35,6 +36,8 @@ namespace SpaceExplorers
             else
             {
                 dialogueBox.Destroy();
+                Program.controller.Return_Control();
+                currentLine = new DialogueLine();
             }
         }
     }

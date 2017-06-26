@@ -8,9 +8,11 @@ using SFML.Window;
 
 namespace SpaceExplorers
 {
-    class Actor : RoomEntity, IControllable
+    public class Actor : RoomEntity, IControllable
     {
         enum Direction : byte { Down, Up, Left, Right };
+
+        public string Name;
 
         bool keyUp = false;
         bool keyDown = false;
@@ -21,27 +23,25 @@ namespace SpaceExplorers
         Direction keyRecent = 0;
         float speed;
         float interactSize = 50;
-        String portraitKey;
+        public string PortraitKey;
 
-        public Actor(string ID, Vector position, int[] size, string textureKey, string portraitKey, float speed)
+        public Actor(string ID, string name, Vector size, string textureKey, string portraitKey, float speed) : base(ID, size, textureKey)
         {
-            this.ID = ID;
-            this.position = position;
-            this.size = size;
-            velocity = new Vector(0, 0);
-            this.textureKey = textureKey;
-            this.portraitKey = portraitKey;
+            Name = name;
+            Size = size;
+            Velocity = new Vector(0, 0);
+            PortraitKey = portraitKey;
             this.speed = speed;
         }
 
         // --Public Methods--
         public override void Step()
         {
-            ZLevel = (int)position.Y + size[1];
+            ZLevel = (int)(Position.Y + Size.Y);
             if (CollisionDetection)
-                collisionBounds.Offset(velocity);
-            position += velocity;
-            updateVelocity();
+                collisionBounds.Offset(Velocity);
+            Position += Velocity;
+            UpdateVelocity();
         }
 
         /*public override bool Collision_Check(MapObject obj)
@@ -50,24 +50,24 @@ namespace SpaceExplorers
         }*/
 
         // --Private Methods--
-        private void updateVelocity()
+        private void UpdateVelocity()
         {
             if (keyUp && verticalHeading == Direction.Up)
-                velocity.Y = -1;
+                Velocity.Y = -1;
             else if (keyDown && verticalHeading == Direction.Down)
-                velocity.Y = 1;
+                Velocity.Y = 1;
             else
-                velocity.Y = 0;
+                Velocity.Y = 0;
 
             if (keyLeft && horizontalHeading == Direction.Left)
-                velocity.X = -1;
+                Velocity.X = -1;
             else if (keyRight && horizontalHeading == Direction.Right)
-                velocity.X = 1;
+                Velocity.X = 1;
             else
-                velocity.X = 0;
+                Velocity.X = 0;
 
-            velocity.Normalize();
-            velocity *= speed;
+            Velocity.Normalize();
+            Velocity *= speed;
         }
 
         internal FloatRect getInteractArea()

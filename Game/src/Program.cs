@@ -22,8 +22,24 @@ namespace SpaceExplorers
 
         static void Main(string[] args)
         {
+
+            //Create the View
+            View defaultView = new View(new Vector2f(windowDim.X, windowDim.Y), new Vector2f(windowDim.X, windowDim.Y));
+            defaultView.Zoom(0.5f);
+            Camera defaultCamera = new Camera(defaultView);
+
+            //Create the Room
+            ActiveRoom = new Room(1000, 1000, defaultCamera);
+            controller.Set_Room(ActiveRoom);
+
+            //Create the Hud
+            ActiveHud = new Hud(windowDim);
+
             //Initalize Fonts
             FontLibrary.Initialize();
+
+            //Initialize Entities
+            EntityLibrary.Initialize();
 
             //Create Dialogue Engine
             DialogueEngine = new DialogueEngine();
@@ -44,32 +60,22 @@ namespace SpaceExplorers
             // Here we lock the refresh rate to 60 fps.
             window.SetFramerateLimit(60);
 
-            //Create the View
-            View defaultView = new View(new Vector2f(windowDim.X, windowDim.Y), new Vector2f(windowDim.X, windowDim.Y));
-            defaultView.Zoom(0.5f);
-            Camera defaultCamera = new Camera(defaultView);
-
-            //Create the Room
-            ActiveRoom = new Room(1000, 1000, defaultCamera);
-            controller.Set_Room(ActiveRoom);
-
-            //Create the Hud
-            ActiveHud = new Hud(windowDim);
-
             //Create New Mapentitys and add them to the room
-            EntityLibrary.Initialize();
-            ActiveRoom.entityList.Add((RoomEntity) EntityLibrary.Entities["Background"]);
-            ActiveRoom.entityList.Add((RoomEntity)EntityLibrary.Entities["DebugBox"]);
-            ActiveRoom.entityList.Add((RoomEntity)EntityLibrary.Entities["DebugCube"]);
-            ActiveRoom.entityList.Add((RoomEntity)EntityLibrary.Entities["DebugAngleCube"]);
-            Actor Jacob = (Actor)EntityLibrary.Entities["Jacob"];
-            ActiveRoom.entityList.Add(Jacob);
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("Background"));
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugBox", new Vector(300, 250)));
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugBox", new Vector(500, 300)));
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugBox", new Vector(450, 450)));
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugBox", new Vector(100, 550)));
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugCube", new Vector(150, 300)));
+            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("Jacob", new Vector(370, 400)));
+            Actor Jacob = (Actor)EntityLibrary.Create("Jacob", new Vector(100, 200));
+            ActiveRoom.EntityList.Add(Jacob);
             controller.Set_Control(Jacob);
             defaultCamera.Set_Focus(Jacob);
-            Actor JBreech = (Actor)EntityLibrary.Entities["JBreech"];
+            Actor JBreech = (Actor)EntityLibrary.Create("JBreech", new Vector(150, 200));
             Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue(char1, char2);
-            JBreech.InitializeInteraction(26, 47, dialogue);
-            ActiveRoom.entityList.Add(JBreech);
+            JBreech.InitializeInteraction(new Vector(26, 47), dialogue);
+            ActiveRoom.EntityList.Add(JBreech);
 
             // Load in the music. Only do this once as well.
             //Sound Music = new Sound(new SoundBuffer("Sound\\blahblah.ogg"));

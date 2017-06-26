@@ -31,9 +31,9 @@ namespace SpaceExplorers
         public static void Initialize()
         {
             Dialogue test = new Dialogue(new DialogueKey ("Jacob", "JBreech"));
-            test.Lines.Add(new DialogueLine(0, "Test1", false, false));
-            test.Lines.Add(new DialogueLine(1, "Test2", false, false));
-            test.Lines.Add(new DialogueLine(2, "Test3", false, true));
+            test.Lines.Add(new DialogueLine(0, "Test1", false, false, (Actor)EntityLibrary.Entities["Jacob"]));
+            test.Lines.Add(new DialogueLine(1, "Test2", false, false, (Actor)EntityLibrary.Entities["JBreech"]));
+            test.Lines.Add(new DialogueLine(2, "Test3", false, true, null));
             Dialogues.Add(test.ID, test);
         }
     }

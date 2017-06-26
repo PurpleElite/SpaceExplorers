@@ -15,10 +15,12 @@ namespace SpaceExplorers
         Dictionary<string, ProcessKeyDelegate> keyReleaseDict = new Dictionary<string, ProcessKeyDelegate>();
         IControllable control = null;
         Room activeRoom = null;
+        Stack<IControllable> controlHistory;
 
         //Default Controls
         public Controller()
         {
+            controlHistory = new Stack<IControllable>();
             keyPressDict.Add("E", new ProcessKeyDelegate(Use_Pressed));
             keyPressDict.Add("W", new ProcessKeyDelegate(Up_Pressed));
             keyPressDict.Add("A", new ProcessKeyDelegate(Left_Pressed));
@@ -33,7 +35,13 @@ namespace SpaceExplorers
         //Public Methods
         public void Set_Control(IControllable newControl)
         {
+            controlHistory.Push(control);
             control = newControl;
+        }
+
+        public void Return_Control()
+        {
+            control = controlHistory.Pop();
         }
 
         public void Set_Room(Room room)
