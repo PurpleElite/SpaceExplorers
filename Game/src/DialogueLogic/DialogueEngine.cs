@@ -16,7 +16,7 @@ namespace SpaceExplorers
         public void RunDialogue(Entity player, Entity npc)
         {
             Console.WriteLine("RunDialogue");
-            dialogueBox = (MenuDialogue)EntityLibrary.Create("DialogueBox", new Vector(90, 200));
+            dialogueBox = (MenuDialogue)EntityLibrary.Create("DialogueBox", new Vector(81, 200));
             dialogueBox.Initialize();
             Program.ActiveHud.EntityList.Add(dialogueBox);
             Program.controller.Set_Control(dialogueBox);

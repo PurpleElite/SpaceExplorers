@@ -28,6 +28,27 @@ namespace SpaceExplorers
             // do nothing
         }
 
+        public override Entity Copy()
+        {
+            TextBox copy = (TextBox) MemberwiseClone();
+            copy.Position = new Vector(Position.X, Position.Y);
+            copy.Size = new Vector(Size.X, Size.Y);
+            if (Interactable)
+            {
+                copy.InteractPoint = new Vector(InteractPoint.X, InteractPoint.Y);
+                copy.InteractAction = InteractAction;
+            }
+            copy.text = new Text()
+            {
+                Font = text.Font,
+                CharacterSize = text.CharacterSize,
+                Position = text.Position,
+                Color = text.Color,
+            };
+            copy.text.Scale = new Vector2f(0.5f, 0.5f);
+            return copy;
+        }
+
         public void SetColor(byte r, byte g, byte b, byte alpha)
         {
             text.Color = new Color(r, g, b, alpha);

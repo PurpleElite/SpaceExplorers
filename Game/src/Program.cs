@@ -19,6 +19,7 @@ namespace SpaceExplorers
         public static Room ActiveRoom;
         public static Hud ActiveHud;
         public static DialogueEngine DialogueEngine;
+        private static Queue<Sound> soundQueue = new Queue<Sound>();
 
         static void Main(string[] args)
         {
@@ -40,6 +41,9 @@ namespace SpaceExplorers
 
             //Initialize Entities
             EntityLibrary.Initialize();
+
+            //Initialize Sounds
+            SoundLibrary.Initialize();
 
             //Create Dialogue Engine
             DialogueEngine = new DialogueEngine();
@@ -122,9 +126,30 @@ namespace SpaceExplorers
 
                 // And then we display everything we drew
                 window.Display();
+
+                // Now we play our sounds
+                while(soundQueue.Count > 0)
+                {
+                    Sound sound = soundQueue.Dequeue();
+                    sound.Play();
+                }
             }
 
             return;
+        }
+
+        public static void QueueSound(string soundID)
+        {
+            try
+            {
+                Sound newSound = SoundLibrary.Sounds[soundID];
+                soundQueue.Enqueue(newSound);
+            }
+            catch (KeyNotFoundException)
+            {
+                Console.WriteLine("Sound not in library: " + soundID);
+            }
+            
         }
 
         private static void Window_KeyReleased(Object sender, KeyEventArgs e)

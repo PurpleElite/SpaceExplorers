@@ -34,6 +34,11 @@ namespace SpaceExplorers
             Size = new Vector(0, 0);
         }
 
+        public virtual Entity Copy()
+        {
+            return ObjectExtensions.Copy(this);
+        }
+
         public void InitializeInteraction(Vector location, Action<Entity, Entity> action)
         {
             InteractPoint = location;

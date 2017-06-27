@@ -26,6 +26,7 @@ namespace SpaceExplorers
             keyPressDict.Add("A", new ProcessKeyDelegate(Left_Pressed));
             keyPressDict.Add("S", new ProcessKeyDelegate(Down_Pressed));
             keyPressDict.Add("D", new ProcessKeyDelegate(Right_Pressed));
+            keyReleaseDict.Add("E", new ProcessKeyDelegate(Use_Released));
             keyReleaseDict.Add("W", new ProcessKeyDelegate(Up_Released));
             keyReleaseDict.Add("A", new ProcessKeyDelegate(Left_Released));
             keyReleaseDict.Add("S", new ProcessKeyDelegate(Down_Released));
@@ -98,6 +99,12 @@ namespace SpaceExplorers
         {
             if (control != null)
                 control.Right_Pressed();
+        }
+
+        private void Use_Released()
+        {
+            if (control != null)
+                control.Use_Released();
         }
 
         private void Up_Released()

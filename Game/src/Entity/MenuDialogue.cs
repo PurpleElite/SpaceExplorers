@@ -11,6 +11,15 @@ namespace SpaceExplorers
         TextBox textDisplay;
         TextBox textName;
         HudEntity portrait;
+        string displayText;
+        int displayIncrement;
+        int stepCount;
+        int soundCooldown;
+        bool displayDone = true;
+        bool speedUp = false;
+        List<char> pauseChars = new List<char> { '!', '?', '.', ':' };
+        List<char> slowChars = new List<char> { ',', ';' };
+        List<char> skipChars = new List<char> { '(', ')', '\'', '\n', '\r', '"' };
 
         // --Constructors--
         public MenuDialogue(string ID, Vector size, string textureKey) : base(ID, size, textureKey)
@@ -28,6 +37,21 @@ namespace SpaceExplorers
         public MenuDialogue() : base() {}
 
         // --Public Methods--
+        public override Entity Copy()
+        {
+            MenuDialogue copy = (MenuDialogue) MemberwiseClone();
+            copy.Position = new Vector(Position.X, Position.Y);
+            copy.Size = new Vector(Size.X, Size.Y);
+            if (Interactable)
+            {
+                copy.InteractPoint = new Vector(InteractPoint.X, InteractPoint.Y);
+                copy.InteractAction = InteractAction;
+            }
+            copy.textDisplay = (TextBox) textDisplay.Copy();
+            copy.textName = (TextBox) textName.Copy();
+            return copy;
+        }
+
         public void Initialize()
         {
             Program.ActiveHud.EntityList.Add(textDisplay);
@@ -37,12 +61,61 @@ namespace SpaceExplorers
 
         public override void Step()
         {
+            if (displayDone)
+                return;
+            if (stepCount <= 0)
+            {
+                if (displayIncrement >= displayText.Length)
+                {
+                    displayDone = true;
+                }
+                else
+                {
+                    char currentChar = displayText[displayIncrement];
+                    if (skipChars.Any(item => item == currentChar))
+                    {
+                        displayIncrement++;
+                        Step();
+                        return;
+                    }
+                    if (speedUp)
+                    {
+                        stepCount = 0;
+                        displayIncrement++;
+                    }
+                    else if (pauseChars.Any(item => item == currentChar))
+                        stepCount = 16;
+                    else if (slowChars.Any(item => item == currentChar))
+                        stepCount = 8;
+                    else if (currentChar == ' ')
+                        stepCount = 5;
+                    else
+                        stepCount = 2;
+                    displayIncrement++;
 
+                    if (soundCooldown <= 0)
+                    {
+                        Program.QueueSound("speechBlip");
+                        if (speedUp)
+                            soundCooldown = 3;
+                        else
+                            soundCooldown = 4;
+                    }
+                }
+                textDisplay.SetText(displayText.Substring(0, displayIncrement));
+            }
+            stepCount--;
+            soundCooldown--;
         }
 
         internal void Display(DialogueLine line)
         {
-            textDisplay.SetText(line.text);
+            displayDone = false;
+            soundCooldown = 0;
+            stepCount = 0;
+            displayIncrement = 0;
+            displayText = Utility.WrapText(line.text, 44);
+            displayText = displayText.Replace("\r", "");
             if (line.speaker != null)
             {
                 textName.SetText(line.speaker.Name);
@@ -82,11 +155,19 @@ namespace SpaceExplorers
 
         public void Right_Released() {  }
 
-        public void Use_Pressed() { Program.DialogueEngine.Forward(); }
+        public void Use_Pressed()
+        {
+            if (displayDone)
+                Program.DialogueEngine.Forward();
+            else
+                speedUp = true;
+            Console.WriteLine("Press speedUp: " + speedUp);
+        }
 
         public void Use_Released()
         {
-            // Do nothing
+            speedUp = false;
+            Console.WriteLine("Release speedUp: " + speedUp);
         }
     }
 }
