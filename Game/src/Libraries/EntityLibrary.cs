@@ -89,6 +89,10 @@ namespace SpaceExplorers
             TextureLibrary.Textures.Add("DialogueBoxWIP.png", new Texture(new Image("Images\\DialogueBoxWIP.png")));
             MenuDialogue DialogueBox = new MenuDialogue("DialogueBox", new Vector(300, 52), "DialogueBoxWIP.png");
             Entities.Add(DialogueBox.GetID(), DialogueBox);
+
+            TextureLibrary.Textures.Add("DialogueSelection.png", new Texture(new Image("Images\\DialogueSelection.png")));
+            HudEntity DialogueSelection = new HudEntity("DialogueSelection", new Vector(162, 11), "DialogueSelection.png");
+            Entities.Add(DialogueSelection.GetID(), DialogueSelection);
         }
 
         public static Entity Create(string ID, Vector Position)

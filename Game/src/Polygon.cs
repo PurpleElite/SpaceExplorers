@@ -45,6 +45,17 @@ namespace SpaceExplorers {
 			}
 		}
 
+        public Polygon Copy()
+        {
+            Polygon copy = new Polygon();
+            foreach (var point in Points)
+            {
+                copy.Points.Add(point);
+            }
+            copy.BuildEdges();
+            return copy;
+        }
+
 		public void Offset(Vector v) {
 			Offset(v.X, v.Y);
 		}

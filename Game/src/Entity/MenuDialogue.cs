@@ -39,16 +39,10 @@ namespace SpaceExplorers
         // --Public Methods--
         public override Entity Copy()
         {
-            MenuDialogue copy = (MenuDialogue) MemberwiseClone();
-            copy.Position = new Vector(Position.X, Position.Y);
-            copy.Size = new Vector(Size.X, Size.Y);
-            if (Interactable)
-            {
-                copy.InteractPoint = new Vector(InteractPoint.X, InteractPoint.Y);
-                copy.InteractAction = InteractAction;
-            }
-            copy.textDisplay = (TextBox) textDisplay.Copy();
-            copy.textName = (TextBox) textName.Copy();
+            MenuDialogue copy = (MenuDialogue)base.Copy();
+            copy.textDisplay = (TextBox)textDisplay.Copy();
+            copy.textName = (TextBox)textName.Copy();
+            copy.portrait = (HudEntity)portrait.Copy();
             return copy;
         }
 

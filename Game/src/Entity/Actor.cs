@@ -35,6 +35,12 @@ namespace SpaceExplorers
         }
 
         // --Public Methods--
+        public override Entity Copy()
+        {
+            Actor copy = (Actor)base.Copy();
+            return copy;
+        }
+
         public override void Step()
         {
             ZLevel = (int)(Position.Y + Size.Y);

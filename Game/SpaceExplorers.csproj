@@ -93,6 +93,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="src\Entity\MenuList.cs" />
     <Compile Include="src\Libraries\SoundLibrary.cs" />
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\Entity\Actor.cs" />
@@ -109,7 +110,6 @@
     <Compile Include="src\Interfaces\IRenderable.cs" />
     <Compile Include="src\Entity\MenuDialogue.cs" />
     <Compile Include="src\Entity\RoomEntity.cs" />
-    <Compile Include="src\ObjectExtensions.cs" />
     <Compile Include="src\Polygon.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -192,6 +192,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\DialogueBoxWIP.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DialogueChoices.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Images\DialogueSelection.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Hub7Day.png">

@@ -29,6 +29,15 @@ namespace SpaceExplorers
         }
 
         // --Public Methods--
+        public override Entity Copy()
+        {
+            RoomEntity copy = (RoomEntity)base.Copy();
+            copy.Velocity = new Vector(Velocity.X, Velocity.Y);
+            if (CollisionDetection)
+                copy.collisionBounds = collisionBounds.Copy();
+            return copy;
+        }
+
         public virtual void Step()
         {
             if (!LockZLevel)

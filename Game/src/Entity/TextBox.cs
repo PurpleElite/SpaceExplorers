@@ -9,18 +9,18 @@ namespace SpaceExplorers
 {
     class TextBox : HudEntity
     {
-        Text text;
+        Text Text { get; set; }
 
         // --Constructors--
         public TextBox(string ID, Vector size, Font font, uint charSize) : base(ID, size, null)
         {
-            text = new Text()
+            Text = new Text()
             {
                 Font = font,
                 CharacterSize = charSize,
                 Position = new Vector2f(0, 0)
             };
-            text.Scale = new Vector2f(0.5f, 0.5f);
+            Text.Scale = new Vector2f(0.5f, 0.5f);
         }
 
         public TextBox() : base()
@@ -30,45 +30,38 @@ namespace SpaceExplorers
 
         public override Entity Copy()
         {
-            TextBox copy = (TextBox) MemberwiseClone();
-            copy.Position = new Vector(Position.X, Position.Y);
-            copy.Size = new Vector(Size.X, Size.Y);
-            if (Interactable)
+            TextBox copy = (TextBox)base.Copy();
+            copy.Text = new Text()
             {
-                copy.InteractPoint = new Vector(InteractPoint.X, InteractPoint.Y);
-                copy.InteractAction = InteractAction;
-            }
-            copy.text = new Text()
-            {
-                Font = text.Font,
-                CharacterSize = text.CharacterSize,
-                Position = text.Position,
-                Color = text.Color,
+                Font = Text.Font,
+                CharacterSize = Text.CharacterSize,
+                Position = Text.Position,
+                Color = Text.Color,
             };
-            copy.text.Scale = new Vector2f(0.5f, 0.5f);
+            copy.Text.Scale = new Vector2f(0.5f, 0.5f);
             return copy;
         }
 
         public void SetColor(byte r, byte g, byte b, byte alpha)
         {
-            text.Color = new Color(r, g, b, alpha);
+            Text.Color = new Color(r, g, b, alpha);
         }
 
         public void SetText(string newText)
         {
-            text.DisplayedString = newText;
+            Text.DisplayedString = newText;
             // Remember to implement text wrapping
         }
 
         public override Renderable Draw()
         {
-            return new Renderable(text);
+            return new Renderable(Text);
         }
 
         public override void SetPosition(Vector pos)
         {
             Position = pos;
-            text.Position = new Vector2f(Position.X, Position.Y);
+            Text.Position = new Vector2f(Position.X, Position.Y);
         }
     }
 }

@@ -36,7 +36,15 @@ namespace SpaceExplorers
 
         public virtual Entity Copy()
         {
-            return ObjectExtensions.Copy(this);
+            Entity copy = (Entity)MemberwiseClone();
+            copy.Position = new Vector(Position.X, Position.Y);
+            copy.Size = new Vector(Size.X, Size.Y);
+            if (Interactable)
+            {
+                copy.InteractPoint = new Vector(InteractPoint.X, InteractPoint.Y);
+                copy.InteractAction = InteractAction;
+            }
+            return copy;
         }
 
         public void InitializeInteraction(Vector location, Action<Entity, Entity> action)

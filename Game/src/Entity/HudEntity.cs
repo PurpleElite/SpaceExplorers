@@ -18,6 +18,11 @@ namespace SpaceExplorers
         }
 
         // --Public Methods--
+        public override Entity Copy()
+        {
+            HudEntity copy = (HudEntity) base.Copy();
+            return copy;
+        }
         public virtual void Step()
         {
             
