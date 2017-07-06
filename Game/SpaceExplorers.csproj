@@ -97,7 +97,7 @@
     <Compile Include="src\Libraries\SoundLibrary.cs" />
     <Compile Include="src\Camera.cs" />
     <Compile Include="src\Entity\Actor.cs" />
-    <Compile Include="src\DialogueLogic\Dialogue.cs" />
+    <Compile Include="src\DialogueLogic\DialogueLine.cs" />
     <Compile Include="src\Libraries\DialogueLibrary.cs" />
     <Compile Include="src\Libraries\FontLibrary.cs" />
     <Compile Include="src\Interfaces\IControllable.cs" />
@@ -247,6 +247,12 @@
     </Content>
     <Content Include="Sound\Speech4.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sound\Speech5.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sound\Speech6.wav">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

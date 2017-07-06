@@ -13,16 +13,28 @@ namespace SpaceExplorers
         //List of objects in the HUD
         public List<HudEntity> EntityList;
 
+        private Queue<HudEntity> AddQueue;
+
         private Vector2u windowDim;
 
         public Hud(Vector2u windowDim)
         {
             this.windowDim = windowDim;
             EntityList = new List<HudEntity>();
+            AddQueue = new Queue<HudEntity>();
+        }
+
+        public void AddEntity(HudEntity ent)
+        {
+            AddQueue.Enqueue(ent);
         }
 
         public void Step()
         {
+            while(AddQueue.Count > 0)
+            {
+                EntityList.Add(AddQueue.Dequeue());
+            }
             foreach (var ent in EntityList)
             {
                 ent.Step();

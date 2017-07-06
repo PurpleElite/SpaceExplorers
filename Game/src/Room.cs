@@ -13,6 +13,8 @@ namespace SpaceExplorers
         //List of objects in the room
         public List<RoomEntity> EntityList;
 
+        private Queue<RoomEntity> AddQueue;
+
         //Room Bounds
         int xBound;
         int yBound;
@@ -24,12 +26,22 @@ namespace SpaceExplorers
             this.xBound = xBound;
             this.yBound = yBound;
             EntityList = new List<RoomEntity>();
+            AddQueue = new Queue<RoomEntity>();   
             this.camera = camera;
             camera.Bounds = new Vector2f(xBound, yBound);
         }
 
+        public void AddEntity(RoomEntity ent)
+        {
+            AddQueue.Enqueue(ent);
+        }
+
         public void Step()
         {
+            while (AddQueue.Count > 0)
+            {
+                EntityList.Add(AddQueue.Dequeue());
+            }
             foreach (var ent in EntityList)
             {
                 if (ent.CollisionDetection)

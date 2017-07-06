@@ -11,7 +11,13 @@ namespace SpaceExplorers
         public class ListOption
         {
             public string Text;
-            public Action<int> Action;
+            public Action Action;
+
+            public ListOption(string text, Action action)
+            {
+                Text = text;
+                Action = action;
+            }
         }
 
         public List<ListOption> Options;
@@ -26,19 +32,29 @@ namespace SpaceExplorers
             selectionBoundary = new HudEntity();
         }
 
+        public void Initialize()
+        {
+            Program.ActiveHud.EntityList.Add(selectionBoundary);
+            selectionBoundary.SetZLevel(ZLevel + 1);
+        }
+
         public void AddOption(ListOption newOption)
         {
             if (Options.Count == 0)
+            {
                 selectionBoundary = (HudEntity)EntityLibrary.Create("DialogueSelection", new Vector(0, 0));
+            }
             SetPosition(new Vector(Position.X, Position.Y - 9));
             selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
-            Options.Add(newOption);
             TextBox newText = new TextBox(ID + "Option" + Options.Count, new Vector(162, 9), FontLibrary.Fonts["small"], 16);
             newText.SetColor(74, 193, 255, 255);
             newText.SetZLevel(ZLevel + 1);
-            newText.Position = Position + new Vector(4, 4 + 9 * Options.Count);
+            newText.SetPosition(new Vector(Position.X + 5, Position.Y + 13));
+            newText.SetText(newOption.Text);
             TextBoxes.Add(newText);
-            Program.ActiveHud.EntityList.Add(newText);
+            newText.SetZLevel(ZLevel + 1);
+            Options.Add(newOption);
+            Program.ActiveHud.AddEntity(newText);
         }
 
         public override Entity Copy()
@@ -52,60 +68,78 @@ namespace SpaceExplorers
             copy.TextBoxes = new List<TextBox>();
             foreach (var textBox in TextBoxes)
             {
-                copy.TextBoxes.Add(textBox);
+                copy.TextBoxes.Add((TextBox)textBox.Copy());
             }
             copy.selectionBoundary =(HudEntity)selectionBoundary.Copy();
             return copy;
         }
 
+        public override void Destroy()
+        {
+            selectionBoundary.Destroy();
+            foreach (var text in TextBoxes)
+            {
+                text.Destroy();
+            }
+            base.Destroy();
+        }
+
+        public override void SetPosition(Vector position)
+        {
+            Vector difference = position - Position;
+            foreach (var text in TextBoxes)
+            {
+                text.SetPosition(text.Position + difference);
+            }
+            base.SetPosition(position);
+        }
+
         public void Down_Pressed()
         {
-            throw new NotImplementedException();
+            SelectionIndex--;
+            if (SelectionIndex < 0) SelectionIndex = 0;
+            selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
         }
 
         public void Down_Released()
         {
-            throw new NotImplementedException();
         }
 
         public void Left_Pressed()
         {
-            throw new NotImplementedException();
         }
 
         public void Left_Released()
         {
-            throw new NotImplementedException();
         }
 
         public void Right_Pressed()
         {
-            throw new NotImplementedException();
         }
 
         public void Right_Released()
         {
-            throw new NotImplementedException();
         }
 
         public void Up_Pressed()
         {
-            throw new NotImplementedException();
+            SelectionIndex++;
+            if (SelectionIndex >= Options.Count) SelectionIndex = Options.Count-1;
+            selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
         }
 
         public void Up_Released()
         {
-            throw new NotImplementedException();
         }
 
         public void Use_Pressed()
         {
-            throw new NotImplementedException();
+            Destroy();
+            Options[SelectionIndex].Action();
         }
 
         public void Use_Released()
         {
-            throw new NotImplementedException();
         }
     }
 }

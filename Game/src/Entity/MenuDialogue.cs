@@ -62,6 +62,7 @@ namespace SpaceExplorers
                 if (displayIncrement >= displayText.Length)
                 {
                     displayDone = true;
+                    Program.DialogueEngine.DisplayFinished();
                 }
                 else
                 {
@@ -89,7 +90,7 @@ namespace SpaceExplorers
 
                     if (soundCooldown <= 0)
                     {
-                        Program.QueueSound("speechBlip");
+                        Program.QueueSound("speechBlip6");
                         if (speedUp)
                             soundCooldown = 3;
                         else
@@ -108,12 +109,12 @@ namespace SpaceExplorers
             soundCooldown = 0;
             stepCount = 0;
             displayIncrement = 0;
-            displayText = Utility.WrapText(line.text, 44);
+            displayText = Utility.WrapText(line.Text, 44);
             displayText = displayText.Replace("\r", "");
-            if (line.speaker != null)
+            if (line.Speaker != null)
             {
-                textName.SetText(line.speaker.Name);
-                portrait.textureKey = line.speaker.PortraitKey;
+                textName.SetText(line.Speaker.Name);
+                portrait.textureKey = line.Speaker.PortraitKey;
             }
         }
 

@@ -21,6 +21,11 @@ namespace SpaceExplorers
             Sounds.Add("speechBlip3", speechBlip3);
             Sound speechBlip4 = new Sound(new SoundBuffer("Sound\\Speech4.wav"));
             Sounds.Add("speechBlip4", speechBlip4);
+            Sound speechBlip5 = new Sound(new SoundBuffer("Sound\\Speech5.wav"));
+            Sounds.Add("speechBlip5", speechBlip5);
+            Sound speechBlip6 = new Sound(new SoundBuffer("Sound\\Speech6.wav"));
+            speechBlip6.Volume = 50F;
+            Sounds.Add("speechBlip6", speechBlip6);
         }
     }
 }
