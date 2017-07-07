@@ -14,6 +14,7 @@ namespace SpaceExplorers
         public List<RoomEntity> EntityList;
 
         private Queue<RoomEntity> AddQueue;
+        private Queue<RoomEntity> RemoveQueue;
 
         //Room Bounds
         int xBound;
@@ -26,7 +27,8 @@ namespace SpaceExplorers
             this.xBound = xBound;
             this.yBound = yBound;
             EntityList = new List<RoomEntity>();
-            AddQueue = new Queue<RoomEntity>();   
+            AddQueue = new Queue<RoomEntity>();
+            RemoveQueue = new Queue<RoomEntity>();
             this.camera = camera;
             camera.Bounds = new Vector2f(xBound, yBound);
         }
@@ -36,11 +38,20 @@ namespace SpaceExplorers
             AddQueue.Enqueue(ent);
         }
 
+        public void RemoveEntity(RoomEntity ent)
+        {
+            RemoveQueue.Enqueue(ent);
+        }
+
         public void Step()
         {
             while (AddQueue.Count > 0)
             {
                 EntityList.Add(AddQueue.Dequeue());
+            }
+            while (RemoveQueue.Count > 0)
+            {
+                EntityList.Remove(RemoveQueue.Dequeue());
             }
             foreach (var ent in EntityList)
             {

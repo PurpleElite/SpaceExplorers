@@ -14,7 +14,7 @@ namespace SpaceExplorers
     class Program
     {
         //Controller to track key bindings and inputs
-        public static Controller controller = new Controller();
+        public static Controller Controller = new Controller();
         static Vector2u windowDim = new Vector2u(960, 540);
         public static Room ActiveRoom;
         public static Hud ActiveHud;
@@ -31,7 +31,7 @@ namespace SpaceExplorers
 
             //Create the Room
             ActiveRoom = new Room(1000, 1000, defaultCamera);
-            controller.Set_Room(ActiveRoom);
+            Controller.Set_Room(ActiveRoom);
 
             //Create the Hud
             ActiveHud = new Hud(windowDim);
@@ -74,7 +74,7 @@ namespace SpaceExplorers
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("Jacob", new Vector(370, 400)));
             Actor Jacob = (Actor)EntityLibrary.Create("Jacob", new Vector(100, 200));
             ActiveRoom.EntityList.Add(Jacob);
-            controller.Set_Control(Jacob);
+            Controller.Set_Control(Jacob);
             defaultCamera.Set_Focus(Jacob);
             Actor JBreech = (Actor)EntityLibrary.Create("JBreech", new Vector(150, 200));
             Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue(char1, char2);
@@ -154,12 +154,12 @@ namespace SpaceExplorers
 
         private static void Window_KeyReleased(Object sender, KeyEventArgs e)
         {
-            controller.Key_Release(e.Code.ToString());
+            Controller.Key_Release(e.Code.ToString());
         }
 
         private static void Window_KeyPressed(Object sender, KeyEventArgs e)
         {
-            controller.Key_Press(e.Code.ToString());
+            Controller.Key_Press(e.Code.ToString());
         }
 
         private static void Window_Closed(Object sender, EventArgs e)

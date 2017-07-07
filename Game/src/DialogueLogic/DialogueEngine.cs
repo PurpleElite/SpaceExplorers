@@ -6,6 +6,7 @@ namespace SpaceExplorers
     {
         MenuDialogue dialogueBox;
         DialogueLine currentLine;
+        bool done;
 
         public DialogueEngine()
         {
@@ -14,26 +15,25 @@ namespace SpaceExplorers
 
         public void RunDialogue(Entity player, Entity npc)
         {
-            Console.WriteLine("RunDialogue");
+            done = false;
             dialogueBox = (MenuDialogue)EntityLibrary.Create("DialogueBox", new Vector(81, 200));
             dialogueBox.Initialize();
             Program.ActiveHud.AddEntity(dialogueBox);
-            Program.controller.Set_Control(dialogueBox);
+            Program.Controller.Set_Control(dialogueBox);
             currentLine = DialogueLibrary.Dialogues[new DialogueLibrary.DialogueKey(player, npc)];
             dialogueBox.Display(currentLine);
         }
 
         public void Forward()
         {
-            Console.WriteLine("Forward");
-            if (currentLine.Choices.Count > 0)
+            if (done)
             {
-                dialogueBox.Display(currentLine);
+                dialogueBox.Destroy();
+                Program.Controller.Return_Control();
             }
             else
             {
-                dialogueBox.Destroy();
-                Program.controller.Return_Control();
+                dialogueBox.Display(currentLine);
             }
         }
 
@@ -41,19 +41,24 @@ namespace SpaceExplorers
         {
             if (currentLine.Choices.Count > 1)
             {
-                MenuList choiceList = (MenuList)EntityLibrary.Create("DialogueChoice", new Vector(81, 196 - 9 * currentLine.Choices.Count));
+                MenuList choiceList = (MenuList)EntityLibrary.Create("DialogueChoice", new Vector(81, 196));
                 choiceList.SetZLevel(dialogueBox.ZLevel - 2);
                 for (int i = 0; i < currentLine.Choices.Count; i++)
                 {
-                    Action choiceAction = () => ChooseNext(i);
+                    int j = i;
+                    Action choiceAction = () => ChooseNext(j);
                     choiceList.AddOption(new MenuList.ListOption(currentLine.Choices[i].ChoiceText, choiceAction));
                 }
                 Program.ActiveHud.AddEntity(choiceList);
-                Program.controller.Set_Control(choiceList);
+                Program.Controller.Set_Control(choiceList);
             }
-            else
+            else if (currentLine.Choices.Count == 1)
             {
                 currentLine = currentLine.Choices[0];
+            }
+            else if(currentLine.Choices.Count == 0)
+            {
+                done = true;
             }
         }
 

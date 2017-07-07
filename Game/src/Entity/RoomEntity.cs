@@ -49,7 +49,7 @@ namespace SpaceExplorers
 
         public virtual void Destroy()
         {
-            Program.ActiveRoom.EntityList.Remove(this);
+            Program.ActiveRoom.RemoveEntity(this);
         }
 
         public virtual bool Collision_Check(RoomEntity obj)

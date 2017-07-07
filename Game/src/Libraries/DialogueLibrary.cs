@@ -58,7 +58,7 @@ namespace SpaceExplorers
             line12.AddChoice(line13);
             var line14 = new DialogueLine("But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it.", null, "...");
             line13.AddChoice(line14);
-            var line15 = new DialogueLine("You’re fucking dead, kiddo.", null);
+            var line15 = new DialogueLine("You’re fucking dead, kiddo.", null, "...");
             line14.AddChoice(line15);
             var line16 = new DialogueLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", (Actor)EntityLibrary.Entities["Jacob"], "[Scream]");
             line15.AddChoice(line16);
@@ -77,6 +77,10 @@ namespace SpaceExplorers
             line12.AddChoice(line18);
             line13.AddChoice(line18);
             line14.AddChoice(line18);
+            var line19 = new DialogueLine("What.", (Actor)EntityLibrary.Entities["Jacob"], "What.");
+            line3.AddChoice(line19);
+            var line20 = new DialogueLine("The fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["Jacob"], "");
+            line19.AddChoice(line20);
         }
     }
 }

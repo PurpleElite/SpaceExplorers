@@ -14,7 +14,7 @@ namespace SpaceExplorers
         public List<HudEntity> EntityList;
 
         private Queue<HudEntity> AddQueue;
-
+        private Queue<HudEntity> RemoveQueue;
         private Vector2u windowDim;
 
         public Hud(Vector2u windowDim)
@@ -22,6 +22,7 @@ namespace SpaceExplorers
             this.windowDim = windowDim;
             EntityList = new List<HudEntity>();
             AddQueue = new Queue<HudEntity>();
+            RemoveQueue = new Queue<HudEntity>();
         }
 
         public void AddEntity(HudEntity ent)
@@ -29,11 +30,20 @@ namespace SpaceExplorers
             AddQueue.Enqueue(ent);
         }
 
+        public void RemoveEntity(HudEntity ent)
+        {
+            RemoveQueue.Enqueue(ent);
+        }
+
         public void Step()
         {
             while(AddQueue.Count > 0)
             {
                 EntityList.Add(AddQueue.Dequeue());
+            }
+            while (RemoveQueue.Count > 0)
+            {
+                EntityList.Remove(RemoveQueue.Dequeue());
             }
             foreach (var ent in EntityList)
             {

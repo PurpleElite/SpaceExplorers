@@ -30,7 +30,7 @@ namespace SpaceExplorers
 
         public virtual void Destroy()
         {
-            Program.ActiveHud.EntityList.Remove(this);
+            Program.ActiveHud.RemoveEntity(this);
         }
 
         public virtual Renderable Draw()

@@ -32,24 +32,20 @@ namespace SpaceExplorers
             selectionBoundary = new HudEntity();
         }
 
-        public void Initialize()
-        {
-            Program.ActiveHud.EntityList.Add(selectionBoundary);
-            selectionBoundary.SetZLevel(ZLevel + 1);
-        }
-
         public void AddOption(ListOption newOption)
         {
             if (Options.Count == 0)
             {
                 selectionBoundary = (HudEntity)EntityLibrary.Create("DialogueSelection", new Vector(0, 0));
+                selectionBoundary.SetZLevel(ZLevel + 1);
+                Program.ActiveHud.AddEntity(selectionBoundary);
             }
             SetPosition(new Vector(Position.X, Position.Y - 9));
             selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
             TextBox newText = new TextBox(ID + "Option" + Options.Count, new Vector(162, 9), FontLibrary.Fonts["small"], 16);
             newText.SetColor(74, 193, 255, 255);
             newText.SetZLevel(ZLevel + 1);
-            newText.SetPosition(new Vector(Position.X + 5, Position.Y + 13));
+            newText.SetPosition(new Vector(Position.X + 5, Position.Y + 3 + 9 * Options.Count));
             newText.SetText(newOption.Text);
             TextBoxes.Add(newText);
             newText.SetZLevel(ZLevel + 1);
@@ -70,7 +66,7 @@ namespace SpaceExplorers
             {
                 copy.TextBoxes.Add((TextBox)textBox.Copy());
             }
-            copy.selectionBoundary =(HudEntity)selectionBoundary.Copy();
+            copy.selectionBoundary = (HudEntity)selectionBoundary.Copy();
             return copy;
         }
 
@@ -96,8 +92,8 @@ namespace SpaceExplorers
 
         public void Down_Pressed()
         {
-            SelectionIndex--;
-            if (SelectionIndex < 0) SelectionIndex = 0;
+            SelectionIndex++;
+            if (SelectionIndex >= Options.Count) SelectionIndex = Options.Count - 1;
             selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
         }
 
@@ -123,8 +119,8 @@ namespace SpaceExplorers
 
         public void Up_Pressed()
         {
-            SelectionIndex++;
-            if (SelectionIndex >= Options.Count) SelectionIndex = Options.Count-1;
+            SelectionIndex--;
+            if (SelectionIndex < 0) SelectionIndex = 0;
             selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
         }
 
@@ -135,6 +131,7 @@ namespace SpaceExplorers
         public void Use_Pressed()
         {
             Destroy();
+            Program.Controller.Return_Control();
             Options[SelectionIndex].Action();
         }
 
