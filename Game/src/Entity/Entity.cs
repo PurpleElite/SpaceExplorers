@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
-    public class Entity
+    public class Entity : IRenderable
     {
         public Vector Position;
         public Vector Size;
@@ -17,6 +17,8 @@ namespace SpaceExplorers
         public Action<Entity, Entity> InteractAction;
         public int ZLevel = 0;
         public int CopyNum = 0;
+        public string TextureKey { get; set; }
+        public Animation Animation { get; set; }
 
         // Constructors
 
@@ -39,12 +41,27 @@ namespace SpaceExplorers
             Entity copy = (Entity)MemberwiseClone();
             copy.Position = new Vector(Position.X, Position.Y);
             copy.Size = new Vector(Size.X, Size.Y);
+            if (Animation != null)
+            {
+                copy.Animation = Animation.Copy();
+            }
             if (Interactable)
             {
                 copy.InteractPoint = new Vector(InteractPoint.X, InteractPoint.Y);
                 copy.InteractAction = InteractAction;
             }
             return copy;
+        }
+
+        public virtual Renderable Draw()
+        {
+            if (TextureKey != null)
+            {
+                Sprite sprite = new Sprite(TextureLibrary.Textures[TextureKey]);
+                sprite.Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition());
+                return new Renderable(sprite);
+            }
+            return new Renderable(null);
         }
 
         public void InitializeInteraction(Vector location, Action<Entity, Entity> action)
@@ -54,12 +71,17 @@ namespace SpaceExplorers
             Interactable = true;
         }
 
+        public virtual void Step()
+        {
+            if (Animation != null)
+            {
+                TextureKey = Animation.Step();
+            }
+        }
+
         // Getter Methods
 
-        public virtual Vector GetPosition()
-        {
-            return Position;
-        }
+        public virtual Vector GetPosition() => Position;
 
         public virtual int GetXPosition()
         {

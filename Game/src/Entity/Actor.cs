@@ -43,17 +43,9 @@ namespace SpaceExplorers
 
         public override void Step()
         {
-            ZLevel = (int)(Position.Y + Size.Y);
-            if (CollisionDetection)
-                collisionBounds.Offset(Velocity);
-            Position += Velocity;
+            base.Step();
             UpdateVelocity();
         }
-
-        /*public override bool Collision_Check(MapObject obj)
-        {
-            return base.Collision_Check(obj);
-        }*/
 
         // --Private Methods--
         private void UpdateVelocity()

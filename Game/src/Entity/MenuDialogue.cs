@@ -114,7 +114,7 @@ namespace SpaceExplorers
             if (line.Speaker != null)
             {
                 textName.SetText(line.Speaker.Name);
-                portrait.textureKey = line.Speaker.PortraitKey;
+                portrait.TextureKey = line.Speaker.PortraitKey;
             }
         }
 

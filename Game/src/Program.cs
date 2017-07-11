@@ -39,6 +39,9 @@ namespace SpaceExplorers
             //Initalize Fonts
             FontLibrary.Initialize();
 
+            //Intialize Animations
+            AnimationLibrary.Initialize();
+
             //Initialize Entities
             EntityLibrary.Initialize();
 

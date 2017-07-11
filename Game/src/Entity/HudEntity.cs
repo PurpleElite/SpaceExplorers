@@ -2,19 +2,17 @@
 
 namespace SpaceExplorers
 {
-    class HudEntity : Entity, IRenderable
+    class HudEntity : Entity
     {
-        public string textureKey;
-
         // --Constructors--
         public HudEntity(string ID, Vector  size, string textureKey) : base(ID, size)
         {
-            this.textureKey = textureKey;
+            TextureKey = textureKey;
         }
 
         public HudEntity() : base()
         {
-            textureKey = null;
+            TextureKey = null;
         }
 
         // --Public Methods--
@@ -23,25 +21,10 @@ namespace SpaceExplorers
             HudEntity copy = (HudEntity) base.Copy();
             return copy;
         }
-        public virtual void Step()
-        {
-            
-        }
 
         public virtual void Destroy()
         {
             Program.ActiveHud.RemoveEntity(this);
-        }
-
-        public virtual Renderable Draw()
-        {
-            if (textureKey != null)
-            {
-                Sprite sprite = new Sprite(TextureLibrary.Textures[textureKey]);
-                sprite.Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition());
-                return new Renderable(sprite);
-            }
-            return new Renderable(null);
         }
     }
 }

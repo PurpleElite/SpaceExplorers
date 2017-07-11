@@ -83,6 +83,7 @@ namespace SpaceExplorers
             TextureLibrary.Textures.Add("Sgt JBreech.png", new Texture(new Image("Images\\Sgt JBreech.png")));
             TextureLibrary.Textures.Add("Sgt JBreech portrait.png", new Texture(new Image("Images\\Sgt JBreech portrait.png")));
             Actor JBreech = new Actor("JBreech", "Jonathan Breech", new Vector(50, 50), "Sgt JBreech.png", "Sgt JBreech portrait.png", 2);
+            JBreech.Animation = AnimationLibrary.Create("BreechWind");
             JBreech.SetCollisionBounds(collisionBoundsBreech);
             Entities.Add(JBreech.GetID(), JBreech);
 

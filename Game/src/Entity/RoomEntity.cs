@@ -14,7 +14,6 @@ namespace SpaceExplorers
         protected Polygon collisionBounds;
         public bool CollisionDetection = false;
         public bool LockZLevel = false;
-        public string TextureKey;
 
         // --Constructors--
 
@@ -38,13 +37,14 @@ namespace SpaceExplorers
             return copy;
         }
 
-        public virtual void Step()
+        public override void Step()
         {
             if (!LockZLevel)
                 ZLevel = (int)(Position.Y + Size.Y);
             if (CollisionDetection)
                 collisionBounds.Offset(Velocity);
             Position += Velocity;
+            base.Step();
         }
 
         public virtual void Destroy()
@@ -64,17 +64,6 @@ namespace SpaceExplorers
         {
             Console.WriteLine("Interaction with " + ID);
             InteractAction.Invoke(user, this);
-        }
-
-        public virtual Renderable Draw()
-        {
-            if (TextureKey != null)
-            {
-                Sprite sprite = new Sprite(TextureLibrary.Textures[TextureKey]);
-                sprite.Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition());
-                return new Renderable(sprite);
-            }
-            return new Renderable(null);
         }
 
         // --Getter Methods--
@@ -104,6 +93,7 @@ namespace SpaceExplorers
         }
 
         // --Setter Methods--
+
         public override void SetPosition(Vector position)
         {
             Vector difference = position - Position;
