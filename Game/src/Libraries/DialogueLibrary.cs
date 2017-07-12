@@ -30,7 +30,7 @@ namespace SpaceExplorers
 
         public static void Initialize()
         {
-            var line1 = new DialogueLine("Hey debug stand in guy how you doin?  You're looking a little unanimated there.", (Actor)EntityLibrary.Entities["Jacob"]);
+            var line1 = new DialogueLine("Hey debug stand in guy how you doin?  You're looking a little animated there.", (Actor)EntityLibrary.Entities["Jacob"]);
             Dialogues.Add(new DialogueKey("Jacob", "JBreech"), line1);
             var line2 = new DialogueLine("What the fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["JBreech"]);
             line1.AddChoice(line2);

@@ -41,7 +41,8 @@ namespace SpaceExplorers
         {
             if (currentLine.Choices.Count > 1)
             {
-                MenuList choiceList = (MenuList)EntityLibrary.Create("DialogueChoice", new Vector(81, 196));
+                MenuList choiceList = (MenuList)EntityLibrary.Create("DialogueChoice", new Vector(81, 200));
+                choiceList.TransformMove(new Vector(81, 196), 10);
                 choiceList.SetZLevel(dialogueBox.ZLevel - 2);
                 for (int i = 0; i < currentLine.Choices.Count; i++)
                 {

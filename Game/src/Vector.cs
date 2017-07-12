@@ -73,7 +73,22 @@ namespace SpaceExplorers
 			return new Vector((float)(a.X * b), (float)(a.Y * b));
 		}
 
-		public override bool Equals(object obj) {
+        public static Vector operator /(Vector a, float b)
+        {
+            return new Vector(a.X / b, a.Y / b);
+        }
+
+        public static Vector operator /(Vector a, int b)
+        {
+            return new Vector(a.X / b, a.Y / b);
+        }
+
+        public static Vector operator /(Vector a, double b)
+        {
+            return new Vector((float)(a.X / b), (float)(a.Y / b));
+        }
+
+        public override bool Equals(object obj) {
 			Vector v = (Vector)obj;
 
 			return X == v.X && Y == v.Y;

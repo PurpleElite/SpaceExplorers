@@ -40,7 +40,7 @@ namespace SpaceExplorers
                 selectionBoundary.SetZLevel(ZLevel + 1);
                 Program.ActiveHud.AddEntity(selectionBoundary);
             }
-            SetPosition(new Vector(Position.X, Position.Y - 9));
+            Destination = new Vector(Destination.X, Destination.Y - 9);
             selectionBoundary.SetPosition(new Vector(Position.X + 4, Position.Y + 3 + 9 * SelectionIndex));
             TextBox newText = new TextBox(ID + "Option" + Options.Count, new Vector(162, 9), FontLibrary.Fonts["small"], 16);
             newText.SetColor(74, 193, 255, 255);
@@ -87,6 +87,7 @@ namespace SpaceExplorers
             {
                 text.SetPosition(text.Position + difference);
             }
+            selectionBoundary.SetPosition(selectionBoundary.Position + difference);
             base.SetPosition(position);
         }
 
@@ -130,9 +131,18 @@ namespace SpaceExplorers
 
         public void Use_Pressed()
         {
-            Destroy();
-            Program.Controller.Return_Control();
-            Options[SelectionIndex].Action();
+            if(_stepCount < 0)
+            {
+                TransformMove(new Vector(Position.X, 200), 10);
+                Action destroy = Destroy;
+                CreateTimer(destroy, 10);
+                Program.Controller.Return_Control();
+                Options[SelectionIndex].Action();
+            }
+            else
+            {
+                _stepCount /= 2;
+            }
         }
 
         public void Use_Released()

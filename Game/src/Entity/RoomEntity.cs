@@ -9,11 +9,8 @@ namespace SpaceExplorers
 {
     public class RoomEntity : Entity, IRenderable
     {
-        public Vector Velocity = new Vector(0, 0);
-        
         protected Polygon collisionBounds;
         public bool CollisionDetection = false;
-        public bool LockZLevel = false;
 
         // --Constructors--
 
@@ -35,16 +32,6 @@ namespace SpaceExplorers
             if (CollisionDetection)
                 copy.collisionBounds = collisionBounds.Copy();
             return copy;
-        }
-
-        public override void Step()
-        {
-            if (!LockZLevel)
-                ZLevel = (int)(Position.Y + Size.Y);
-            if (CollisionDetection)
-                collisionBounds.Offset(Velocity);
-            Position += Velocity;
-            base.Step();
         }
 
         public virtual void Destroy()
