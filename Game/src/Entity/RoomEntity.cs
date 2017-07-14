@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
-    public class RoomEntity : Entity, IRenderable
+    public class RoomEntity : Entity
     {
         protected Polygon collisionBounds;
         public bool CollisionDetection = false;

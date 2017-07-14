@@ -87,9 +87,13 @@ namespace SpaceExplorers
             JBreech.SetCollisionBounds(collisionBoundsBreech);
             Entities.Add(JBreech.GetID(), JBreech);
 
-            TextureLibrary.Textures.Add("DialogueBoxWIP.png", new Texture(new Image("Images\\DialogueBoxWIP.png")));
-            MenuDialogue DialogueBox = new MenuDialogue("DialogueBox", new Vector(300, 52), "DialogueBoxWIP.png");
+            TextureLibrary.Textures.Add("DialogueBox.png", new Texture(new Image("Images\\DialogueBox.png")));
+            MenuDialogue DialogueBox = new MenuDialogue("DialogueBox", new Vector(270, 56), "DialogueBox.png");
             Entities.Add(DialogueBox.GetID(), DialogueBox);
+
+            TextureLibrary.Textures.Add("DialoguePortrait.png", new Texture(new Image("Images\\DialoguePortrait.png")));
+            HudEntity DialoguePortraitBack = new HudEntity("DialoguePortraitBack", new Vector(48, 56), "DialoguePortrait.png");
+            Entities.Add(DialoguePortraitBack.GetID(), DialoguePortraitBack);
 
             TextureLibrary.Textures.Add("DialogueSelection.png", new Texture(new Image("Images\\DialogueSelection.png")));
             HudEntity DialogueSelection = new HudEntity("DialogueSelection", new Vector(162, 11), "DialogueSelection.png");

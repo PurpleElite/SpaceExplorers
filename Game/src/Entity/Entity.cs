@@ -34,7 +34,13 @@ namespace SpaceExplorers
         public string TextureKey { get; set; }
         public Animation Animation { get; set; }
 
-        protected int _stepCount = -1;
+        private IntRect _maskRect;
+        protected int _stepCountMask = -1;
+        public IntRect NewMaskRect;
+        private bool _mask = false;
+        public IntRect MaskRect { get { return _maskRect; } set { _maskRect = value; _mask = true; } }
+
+        protected int _stepCountMove = -1;
         public Vector Destination;
 
         private List<TimerAction> _timers;
@@ -86,6 +92,10 @@ namespace SpaceExplorers
             {
                 Sprite sprite = new Sprite(TextureLibrary.Textures[TextureKey]);
                 sprite.Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition());
+                if (_mask)
+                {
+                    sprite.TextureRect = MaskRect;
+                }
                 return new Renderable(sprite);
             }
             return new Renderable(null);
@@ -102,17 +112,25 @@ namespace SpaceExplorers
         {
             if (!LockZLevel)
                 ZLevel = (int)(Position.Y + Size.Y);
-            if (_stepCount > 0)
+
+            if (_stepCountMove > 0)
             {
                 Vector difference = Destination - Position;
-                Velocity = difference / _stepCount;
-                _stepCount--;
+                Velocity = difference / _stepCountMove;
+                _stepCountMove--;
             }
-            else if (_stepCount == 0)
+            else if (_stepCountMove == 0)
             {
                 Velocity *= 0;
-                _stepCount--;
+                _stepCountMove--;
             }
+
+            if (_stepCountMask > 0)
+            {
+                MaskRect = RectInterpolate(MaskRect, NewMaskRect, _stepCountMask);
+                _stepCountMask--;
+            }
+
             SetPosition(Position + Velocity);
             if (Animation != null)
             {
@@ -140,8 +158,24 @@ namespace SpaceExplorers
 
         public virtual void TransformMove(Vector destination, int numSteps)
         {
-            _stepCount = numSteps;
+            _stepCountMove = numSteps;
             Destination = destination;
+        }
+
+        public virtual void TransformMask(IntRect newMaskRect, int numSteps)
+        {
+            _stepCountMask = numSteps;
+            NewMaskRect = newMaskRect;
+        }
+
+        // Helper Methods
+        public IntRect RectInterpolate(IntRect current, IntRect target, int steps)
+        {
+            int newLeft = current.Left + (target.Left - current.Left) / steps;
+            int newTop = current.Top + (target.Top - current.Top) / steps;
+            int newWidth = (current.Left + current.Width + (target.Left + target.Width - current.Left - current.Width) / steps) - newLeft;
+            int newHeight = (current.Top + current.Height + (target.Top + target.Height - current.Top - current.Height) / steps) - newTop;
+            return new IntRect(newLeft, newTop, newWidth, newHeight);
         }
 
         // Getter Methods

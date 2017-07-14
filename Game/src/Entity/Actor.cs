@@ -109,7 +109,10 @@ namespace SpaceExplorers
 
         public void Right_Released() { keyRight = false; if (keyLeft) horizontalHeading = Direction.Left; }
 
-        public void Use_Pressed() { Program.ActiveRoom.Use(this); }
+        public void Use_Pressed()
+        {
+            Program.ActiveRoom.Use(this);
+        }
 
         public void Use_Released()
         {

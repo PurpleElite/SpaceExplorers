@@ -131,7 +131,7 @@ namespace SpaceExplorers
 
         public void Use_Pressed()
         {
-            if(_stepCount < 0)
+            if(_stepCountMove < 0)
             {
                 TransformMove(new Vector(Position.X, 200), 10);
                 Action destroy = Destroy;
@@ -141,7 +141,7 @@ namespace SpaceExplorers
             }
             else
             {
-                _stepCount /= 2;
+                _stepCountMove /= 2;
             }
         }
 

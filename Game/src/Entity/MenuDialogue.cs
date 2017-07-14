@@ -10,7 +10,6 @@ namespace SpaceExplorers
     {
         TextBox textDisplay;
         TextBox textName;
-        HudEntity portrait;
         string displayText;
         int displayIncrement;
         int stepCount;
@@ -30,8 +29,6 @@ namespace SpaceExplorers
             textName = new TextBox(ID + "TextBoxName", new Vector(63, 8), FontLibrary.Fonts["small"], 16);
             textName.SetColor(74, 193, 255, 255);
             textName.SetZLevel(ZLevel + 1);
-            portrait = new HudEntity(ID + "Portrait", new Vector(40, 40), null);
-            portrait.SetZLevel(ZLevel + 1);
         }
 
         public MenuDialogue() : base() {}
@@ -42,7 +39,6 @@ namespace SpaceExplorers
             MenuDialogue copy = (MenuDialogue)base.Copy();
             copy.textDisplay = (TextBox)textDisplay.Copy();
             copy.textName = (TextBox)textName.Copy();
-            copy.portrait = (HudEntity)portrait.Copy();
             return copy;
         }
 
@@ -50,11 +46,11 @@ namespace SpaceExplorers
         {
             Program.ActiveHud.EntityList.Add(textDisplay);
             Program.ActiveHud.EntityList.Add(textName);
-            Program.ActiveHud.EntityList.Add(portrait);
         }
 
         public override void Step()
         {
+            base.Step();
             if (displayDone)
                 return;
             if (stepCount <= 0)
@@ -114,7 +110,6 @@ namespace SpaceExplorers
             if (line.Speaker != null)
             {
                 textName.SetText(line.Speaker.Name);
-                portrait.TextureKey = line.Speaker.PortraitKey;
             }
         }
 
@@ -122,16 +117,27 @@ namespace SpaceExplorers
         {
             textDisplay.Destroy();
             textName.Destroy();
-            portrait.Destroy();
             base.Destroy();
         }
 
         public override void SetPosition(Vector position)
         {
-            textDisplay.SetPosition(new Vector(position.X + 50, position.Y + 7));
-            textName.SetPosition(new Vector(position.X + 49, position.Y + 3));
-            portrait.SetPosition(new Vector(position.X + 4, position.Y + 6));
+            textDisplay.SetPosition(new Vector(position.X + 2, position.Y + 7));
+            textName.SetPosition(new Vector(position.X + 1, position.Y + 3));
             base.SetPosition(position);
+        }
+
+        public override void SetZLevel(int z)
+        {
+            textDisplay.SetZLevel(z + 1);
+            textName.SetZLevel(z + 1);
+            base.SetZLevel(z);
+        }
+
+        public void WipeText()
+        {
+            textDisplay.SetText("");
+            textName.SetText("");
         }
 
         public void Up_Pressed() {  }
@@ -152,17 +158,15 @@ namespace SpaceExplorers
 
         public void Use_Pressed()
         {
-            if (displayDone)
+            if (displayDone && _stepCountMask <= 0 && _stepCountMove <= 0)
                 Program.DialogueEngine.Forward();
             else
                 speedUp = true;
-            Console.WriteLine("Press speedUp: " + speedUp);
         }
 
         public void Use_Released()
         {
             speedUp = false;
-            Console.WriteLine("Release speedUp: " + speedUp);
         }
     }
 }
