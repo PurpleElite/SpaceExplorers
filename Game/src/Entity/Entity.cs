@@ -1,9 +1,6 @@
 ﻿using SFML.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
@@ -14,6 +11,11 @@ namespace SpaceExplorers
             public Action Action;
             public int StepCount;
 
+            /// <summary>
+            /// Create new action that will execute after a given number of steps.
+            /// </summary>
+            /// <param name="action"></param>
+            /// <param name="stepCount"></param>
             public TimerAction(Action action, int stepCount)
             {
                 Action = action;
@@ -34,11 +36,11 @@ namespace SpaceExplorers
         public string TextureKey { get; set; }
         public Animation Animation { get; set; }
 
-        private IntRect _maskRect;
+        private FloatRect _maskRect;
         protected int _stepCountMask = -1;
-        public IntRect NewMaskRect;
+        public FloatRect NewMaskRect;
         private bool _mask = false;
-        public IntRect MaskRect { get { return _maskRect; } set { _maskRect = value; _mask = true; } }
+        public FloatRect MaskRect { get { return _maskRect; } set { _maskRect = value; _mask = true; } }
 
         protected int _stepCountMove = -1;
         public Vector Destination;
@@ -46,8 +48,11 @@ namespace SpaceExplorers
         private List<TimerAction> _timers;
 
 
-        // Constructors
-
+        /// <summary>
+        /// Create Entity with given ID and size
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="size"></param>
         public Entity(string ID, Vector size)
         {
             this.ID = ID;
@@ -90,11 +95,13 @@ namespace SpaceExplorers
         {
             if (TextureKey != null)
             {
-                Sprite sprite = new Sprite(TextureLibrary.Textures[TextureKey]);
-                sprite.Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition());
+                Sprite sprite = new Sprite(TextureLibrary.Textures[TextureKey])
+                {
+                    Position = new SFML.Window.Vector2f(GetXPosition(), GetYPosition())
+                };
                 if (_mask)
                 {
-                    sprite.TextureRect = MaskRect;
+                    sprite.TextureRect = new IntRect ((int)MaskRect.Left, (int)MaskRect.Top, (int)MaskRect.Width, (int)MaskRect.Height);
                 }
                 return new Renderable(sprite);
             }
@@ -162,20 +169,20 @@ namespace SpaceExplorers
             Destination = destination;
         }
 
-        public virtual void TransformMask(IntRect newMaskRect, int numSteps)
+        public virtual void TransformMask(FloatRect newMaskRect, int numSteps)
         {
             _stepCountMask = numSteps;
             NewMaskRect = newMaskRect;
         }
 
         // Helper Methods
-        public IntRect RectInterpolate(IntRect current, IntRect target, int steps)
+        public FloatRect RectInterpolate(FloatRect current, FloatRect target, int steps)
         {
-            int newLeft = current.Left + (target.Left - current.Left) / steps;
-            int newTop = current.Top + (target.Top - current.Top) / steps;
-            int newWidth = (current.Left + current.Width + (target.Left + target.Width - current.Left - current.Width) / steps) - newLeft;
-            int newHeight = (current.Top + current.Height + (target.Top + target.Height - current.Top - current.Height) / steps) - newTop;
-            return new IntRect(newLeft, newTop, newWidth, newHeight);
+            float newLeft = current.Left + (target.Left - current.Left) / steps;
+            float newTop = current.Top + (target.Top - current.Top) / steps;
+            float newWidth = (current.Left + current.Width + (target.Left + target.Width - current.Left - current.Width) / steps) - newLeft;
+            float newHeight = (current.Top + current.Height + (target.Top + target.Height - current.Top - current.Height) / steps) - newTop;
+            return new FloatRect(newLeft, newTop, newWidth, newHeight);
         }
 
         // Getter Methods

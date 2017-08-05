@@ -10,8 +10,8 @@ namespace SpaceExplorers
         DialogueLine _currentLine;
         bool _done;
 
-        private int _popupTime = 10;
-        private int _slideTime = 20;
+        private int _popupTime = 8;
+        private int _slideTime = 15;
 
         public DialogueEngine()
         {
@@ -31,11 +31,11 @@ namespace SpaceExplorers
             _dialoguePortrait.SetZLevel(11);
             Program.ActiveHud.AddEntity(_dialoguePortrait);
             _dialogueBox = (MenuDialogue)EntityLibrary.Create("DialogueBox", new Vector(262, 270));
-            _dialogueBox.MaskRect = new SFML.Graphics.IntRect(270, 0, 0, 56);
+            _dialogueBox.MaskRect = new SFML.Graphics.FloatRect(270, 0, 0, 56);
             _dialogueBox.Initialize();
             _dialogueBox.TransformMove(new Vector(262, 200), _popupTime);
             _dialogueBox.CreateTimer(delegate { _dialogueBox.TransformMove(new Vector(129, 200), _slideTime); }, _popupTime);
-            _dialogueBox.CreateTimer(delegate { _dialogueBox.TransformMask(new SFML.Graphics.IntRect(0, 0, 270, 56), _slideTime); }, _popupTime);
+            _dialogueBox.CreateTimer(delegate { _dialogueBox.TransformMask(new SFML.Graphics.FloatRect(0, 0, 270, 56), _slideTime); }, _popupTime);
             _dialogueBox.SetZLevel(9);
             Program.ActiveHud.AddEntity(_dialogueBox);
             Program.Controller.Set_Control(_dialogueBox);
@@ -49,7 +49,7 @@ namespace SpaceExplorers
             {
                 _dialoguePortrait.Destroy();
                 _dialogueBox.WipeText();
-                _dialogueBox.TransformMask(new SFML.Graphics.IntRect(270, 0, 0, 56), _slideTime);
+                _dialogueBox.TransformMask(new SFML.Graphics.FloatRect(270, 0, 0, 56), _slideTime);
                 _dialogueBox.TransformMove(new Vector(262, 200), _slideTime);
                 _dialogueBox.CreateTimer(delegate { _dialogueBox.TransformMove(new Vector(262, 270), _popupTime); }, _slideTime);
                 _dialogueBox.CreateTimer(_dialogueBox.Destroy, _slideTime + _popupTime);
