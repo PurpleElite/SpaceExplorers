@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpaceExplorers
 {
@@ -18,9 +19,19 @@ namespace SpaceExplorers
             // WIP
         }
 
+        /// <summary>
+        /// Run a dialogue between the player and an npc they're interacting with.
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="npc"></param>
         public void RunDialogue(Entity player, Entity npc)
         {
+            //If no dialogue exists between the player and the npc, abort
+            _currentLine = DialogueLibrary.Dialogues.GetOrNull(new DialogueLibrary.DialogueKey(player, npc));
+            if (_currentLine == null) return;
+            //Stop the player's movement
             player.Velocity = new Vector(0, 0);
+            //Set it so that the player cant push the dialogue forward until the text is done displaying
             _done = false;
             _dialoguePortraitBack = (HudEntity)EntityLibrary.Create("DialoguePortraitBack", new Vector(214, 270));
             _dialoguePortraitBack.TransformMove(new Vector(214, 200), _popupTime);
@@ -39,7 +50,6 @@ namespace SpaceExplorers
             _dialogueBox.SetZLevel(9);
             Program.ActiveHud.AddEntity(_dialogueBox);
             Program.Controller.Set_Control(_dialogueBox);
-            _currentLine = DialogueLibrary.Dialogues[new DialogueLibrary.DialogueKey(player, npc)];
             _dialoguePortraitBack.CreateTimer(Forward, _slideTime + _popupTime);
         }
 

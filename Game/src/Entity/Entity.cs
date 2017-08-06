@@ -34,7 +34,13 @@ namespace SpaceExplorers
         public bool LockZLevel = false;
         public int CopyNum = 0;
         public string TextureKey { get; set; }
-        public Animation Animation { get; set; }
+
+        protected Animation _animation;
+        public Animation CurrAnimation
+        {
+            get { return _animation; }
+        }
+        public Dictionary<AnimType, Animation> Animations;
 
         private FloatRect _maskRect;
         protected int _stepCountMask = -1;
@@ -59,6 +65,7 @@ namespace SpaceExplorers
             Position = new Vector(0, 0);
             Size = size;
             _timers = new List<TimerAction>();
+            Animations = new Dictionary<AnimType, Animation>();
         }
 
         public Entity()
@@ -67,6 +74,12 @@ namespace SpaceExplorers
             Position = new Vector (0, 0);
             Size = new Vector(0, 0);
             _timers = new List<TimerAction>();
+            Animations = new Dictionary<AnimType, Animation>();
+        }
+
+        public void AddAnimation(AnimType animType, Animation newAnim)
+        {
+            Animations.Add(animType, newAnim);
         }
 
         public virtual Entity Copy()
@@ -74,9 +87,9 @@ namespace SpaceExplorers
             Entity copy = (Entity)MemberwiseClone();
             copy.Position = new Vector(Position.X, Position.Y);
             copy.Size = new Vector(Size.X, Size.Y);
-            if (Animation != null)
+            if (_animation != null)
             {
-                copy.Animation = Animation.Copy();
+                copy._animation = _animation.Copy();
             }
             if (Interactable)
             {
@@ -139,10 +152,16 @@ namespace SpaceExplorers
             }
 
             SetPosition(Position + Velocity);
-            if (Animation != null)
+            if (_animation == null)
             {
-                TextureKey = Animation.Step();
+                if (Animations.ContainsKey(AnimType.Idle)) _animation = Animations[AnimType.Idle];
             }
+
+            if (_animation != null)
+            {
+                TextureKey = _animation.Step();
+            }
+
             for (int i = _timers.Count - 1; i >= 0; i--)
             {
                 if(_timers[i].StepCount == 0)

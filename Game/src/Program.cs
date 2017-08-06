@@ -75,11 +75,11 @@ namespace SpaceExplorers
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugBox", new Vector(450, 450)));
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugBox", new Vector(100, 550)));
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("DebugCube", new Vector(150, 300)));
-            ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("Jacob", new Vector(370, 400)));
-            Actor Jacob = (Actor)EntityLibrary.Create("Jacob", new Vector(100, 200));
-            ActiveRoom.EntityList.Add(Jacob);
-            Controller.Set_Control(Jacob);
-            defaultCamera.Set_Focus(Jacob);
+            ActiveRoom.EntityList.Add((Actor)EntityLibrary.Create("Jacob", new Vector(370, 400)));
+            Actor AHavisham = (Actor)EntityLibrary.Create("AHavisham", new Vector(100, 200));
+            ActiveRoom.EntityList.Add(AHavisham);
+            Controller.Set_Control(AHavisham);
+            defaultCamera.Set_Focus(AHavisham);
             Actor JBreech = (Actor)EntityLibrary.Create("JBreech", new Vector(150, 200));
             Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue(char1, char2);
             JBreech.InitializeInteraction(new Vector(26, 47), dialogue);
@@ -144,16 +144,13 @@ namespace SpaceExplorers
 
         public static void QueueSound(string soundID)
         {
-            try
-            {
-                Sound newSound = SoundLibrary.Sounds[soundID];
-                soundQueue.Enqueue(newSound);
-            }
-            catch (KeyNotFoundException)
+            Sound newSound = SoundLibrary.Sounds.GetOrNull(soundID);
+            if (newSound == null)
             {
                 Console.WriteLine("Sound not in library: " + soundID);
+                return;
             }
-            
+            soundQueue.Enqueue(newSound); 
         }
 
         private static void Window_KeyReleased(Object sender, KeyEventArgs e)

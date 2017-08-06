@@ -14,7 +14,7 @@ namespace SpaceExplorers
 		public float Y;
 
 		static public Vector FromPoint(int x, int y) {
-			return new Vector((float)x, (float)y);
+			return new Vector(x, y);
 		}
 
 		public Vector(float x, float y) {
@@ -35,6 +35,16 @@ namespace SpaceExplorers
             }
 		}
 
+        public double GetDirection()
+        {
+            double direction = Math.Atan2(Y, X) * 180 / Math.PI;
+            if (direction < 0)
+            {
+                direction += 360;
+            }
+            return direction;
+        }
+
 		public Vector GetNormalized() {
 			float magnitude = Magnitude;
 
@@ -42,11 +52,11 @@ namespace SpaceExplorers
 		}
 
 		public float DotProduct(Vector vector) {
-			return this.X * vector.X + this.Y * vector.Y;
+			return X * vector.X + Y * vector.Y;
 		}
 
 		public float DistanceTo(Vector vector) {
-			return (float)Math.Sqrt(Math.Pow(vector.X - this.X, 2) + Math.Pow(vector.Y - this.Y, 2));
+			return (float)Math.Sqrt(Math.Pow(vector.X - X, 2) + Math.Pow(vector.Y - Y, 2));
 		}
 
 		public static Vector operator +(Vector a, Vector b) {

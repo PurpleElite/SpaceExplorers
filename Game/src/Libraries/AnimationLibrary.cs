@@ -25,7 +25,7 @@ namespace SpaceExplorers
                 {
                     string frameName = Path.GetFileName(framePath);
                     TextureLibrary.Textures.Add(animName + frameName, new Texture(new Image(framePath)));
-                    newAnim.Frames.Add(new Animation.Frame(animName + frameName, 6));
+                    newAnim.Frames.Add(new Animation.Frame(animName + frameName, 8));
                 }
                 Animations.Add(newAnim.ID, newAnim);
             }

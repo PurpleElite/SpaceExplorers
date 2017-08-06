@@ -8,21 +8,21 @@ namespace SpaceExplorers
 {
     static class DialogueLibrary
     {
-        public struct DialogueKey
+        public class DialogueKey : Equ.MemberwiseEquatable<DialogueKey>
         {
-            public string initiator;
-            public string target;
+            public string Initiator { get; }
+            public string Target { get; }
 
             public DialogueKey(Entity initiator, Entity target)
             {
-                this.initiator = initiator.GetID();
-                this.target = target.GetID();
+                Initiator = initiator.GetID();
+                Target = target.GetID();
             }
 
             public DialogueKey(string initiator, string target)
             {
-                this.initiator = initiator;
-                this.target = target;
+                Initiator = initiator;
+                Target = target;
             }
         }
 
@@ -30,8 +30,8 @@ namespace SpaceExplorers
 
         public static void Initialize()
         {
-            var line1 = new DialogueLine("Hey debug stand in guy how you doin?  You're looking a little animated there.", (Actor)EntityLibrary.Entities["Jacob"]);
-            Dialogues.Add(new DialogueKey("Jacob", "JBreech"), line1);
+            var line1 = new DialogueLine("Hey debug stand in guy how you doin?  You're looking a little animated there.", (Actor)EntityLibrary.Entities["AHavisham"]);
+            Dialogues.Add(new DialogueKey("AHavisham", "JBreech"), line1);
             var line2 = new DialogueLine("What the fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["JBreech"]);
             line1.AddChoice(line2);
             var line3 = new DialogueLine("I’ll have you know I graduated top of my class in the Navy Seals", null);
@@ -60,11 +60,11 @@ namespace SpaceExplorers
             line13.AddChoice(line14);
             var line15 = new DialogueLine("You’re fucking dead, kiddo.", null, "...");
             line14.AddChoice(line15);
-            var line16 = new DialogueLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", (Actor)EntityLibrary.Entities["Jacob"], "[Scream]");
+            var line16 = new DialogueLine("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH", (Actor)EntityLibrary.Entities["AHavisham"], "[Scream]");
             line15.AddChoice(line16);
-            var line17 = new DialogueLine("Nice, keep it up.", (Actor)EntityLibrary.Entities["Jacob"], "Nice, keep it up.");
+            var line17 = new DialogueLine("Nice, keep it up.", (Actor)EntityLibrary.Entities["AHavisham"], "Nice, keep it up.");
             line15.AddChoice(line17);
-            var line18 = new DialogueLine("I'm going to stop you right there.", (Actor)EntityLibrary.Entities["Jacob"], "Stop.");
+            var line18 = new DialogueLine("I'm going to stop you right there.", (Actor)EntityLibrary.Entities["AHavisham"], "Stop.");
             line3.AddChoice(line18);
             line4.AddChoice(line18);
             line5.AddChoice(line18);
@@ -77,9 +77,9 @@ namespace SpaceExplorers
             line12.AddChoice(line18);
             line13.AddChoice(line18);
             line14.AddChoice(line18);
-            var line19 = new DialogueLine("What.", (Actor)EntityLibrary.Entities["Jacob"], "What.");
+            var line19 = new DialogueLine("What.", (Actor)EntityLibrary.Entities["AHavisham"], "What.");
             line3.AddChoice(line19);
-            var line20 = new DialogueLine("The fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["Jacob"], "");
+            var line20 = new DialogueLine("The fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["AHavisham"], "");
             line19.AddChoice(line20);
         }
     }

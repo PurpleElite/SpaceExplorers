@@ -52,22 +52,12 @@ namespace SpaceExplorers
 
         public void Key_Press(String key)
         {
-            try
-            {
-                ProcessKeyDelegate action = keyPressDict[key];
-                action();
-            }
-            catch(KeyNotFoundException){ } //do nothing
+            keyPressDict.GetOrNull(key)?.Invoke();
         }
 
         public void Key_Release(String key)
         {
-            try
-            {
-                ProcessKeyDelegate action = keyReleaseDict[key];
-                action();
-            }
-            catch (KeyNotFoundException) { } //do nothing
+            keyReleaseDict.GetOrNull(key)?.Invoke();
         }
 
         //Key Press Methods
