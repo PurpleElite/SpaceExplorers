@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
-    public enum AnimType : int { Idle, RunN, RunNE, RunE, RunSE, RunS, RunSW, RunW, RunNW };
-
     public class Animation
     {
         public class Frame
@@ -24,30 +22,32 @@ namespace SpaceExplorers
 
         public List<Frame> Frames;
         public string ID;
-        int _currentIndex;
+        public int CurrentIndex;
+        public AnimType Type { get; }
         int _stepCount;
 
-        public Animation(string ID)
+        public Animation(string ID, AnimType type)
         {
             this.ID = ID;
+            Type = type;
             Frames = new List<Frame>();
-            _currentIndex = 0;
+            CurrentIndex = 0;
             _stepCount = 0;
         }
 
         public string Step()
         {
-            if (_stepCount >= Frames[_currentIndex].StepDuration)
+            if (_stepCount >= Frames[CurrentIndex].StepDuration)
             {
                 _stepCount = 0;
-                _currentIndex++;
-                if (_currentIndex >= Frames.Count)
+                CurrentIndex++;
+                if (CurrentIndex >= Frames.Count)
                 {
-                    _currentIndex = 0;
+                    CurrentIndex = 0;
                 }
             }
             _stepCount++;
-            return Frames[_currentIndex].TextureKey;
+            return Frames[CurrentIndex].TextureKey;
         }
 
         internal Animation Copy()

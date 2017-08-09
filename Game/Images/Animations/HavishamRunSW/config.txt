@@ -1,0 +1,2 @@
+type = RunSW
+stepDuration = 8

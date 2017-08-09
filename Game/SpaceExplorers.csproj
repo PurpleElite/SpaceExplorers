@@ -117,7 +117,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DictionaryEx.cs" />
+    <Compile Include="src\AnimationTypes.cs" />
+    <Compile Include="src\DictionaryEx.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -1,0 +1,2 @@
+type = Idle
+stepDuration = 6

@@ -1,0 +1,2 @@
+type = RunNW
+stepDuration = 8

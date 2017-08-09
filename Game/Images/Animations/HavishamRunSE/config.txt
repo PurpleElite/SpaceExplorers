@@ -1,0 +1,2 @@
+type = RunSE
+stepDuration = 8
