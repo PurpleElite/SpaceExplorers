@@ -8,27 +8,29 @@ namespace SpaceExplorers
 {
     class MenuDialogue : HudEntity, IControllable
     {
-        TextBox textDisplay;
-        TextBox textName;
-        string displayText;
-        int displayIncrement;
-        int stepCount;
-        int soundCooldown;
-        bool displayDone = true;
-        bool speedUp = false;
-        List<char> pauseChars = new List<char> { '!', '?', '.', ':' };
-        List<char> slowChars = new List<char> { ',', ';' };
-        List<char> skipChars = new List<char> { '(', ')', '\'', '\n', '\r', '"' };
+        private TextBox _textDisplay;
+        private TextBox _textName;
+        private string _displayText;
+        private List<string> _textBlocks = new List<string>();
+        private int _blockIncrement;
+        private int _displayIncrement;
+        private int _stepCount;
+        private int _soundCooldown;
+        private bool _displayDone = true;
+        private bool _speedUp = false;
+        private List<char> _pauseChars = new List<char> { '!', '?', '.', ':' };
+        private List<char> _slowChars = new List<char> { ',', ';' };
+        private List<char> _skipChars = new List<char> { '(', ')', '\'', '\n', '\r', '"' };
 
         // --Constructors--
         public MenuDialogue(string ID, Vector size, string textureKey) : base(ID, size, textureKey)
         {
-            textDisplay = new TextBox(ID + "TextBoxDisplay", new Vector(245, 35), FontLibrary.Fonts["codersCrux"], 32);
-            textDisplay.SetColor(74, 193, 255, 255);
-            textDisplay.SetZLevel(ZLevel + 1);
-            textName = new TextBox(ID + "TextBoxName", new Vector(63, 8), FontLibrary.Fonts["small"], 16);
-            textName.SetColor(74, 193, 255, 255);
-            textName.SetZLevel(ZLevel + 1);
+            _textDisplay = new TextBox(ID + "TextBoxDisplay", new Vector(245, 35), FontLibrary.Fonts["codersCrux"], 32);
+            _textDisplay.SetColor(74, 193, 255, 255);
+            _textDisplay.SetZLevel(ZLevel + 1);
+            _textName = new TextBox(ID + "TextBoxName", new Vector(63, 8), FontLibrary.Fonts["small"], 16);
+            _textName.SetColor(74, 193, 255, 255);
+            _textName.SetZLevel(ZLevel + 1);
         }
 
         public MenuDialogue() : base() {}
@@ -37,107 +39,119 @@ namespace SpaceExplorers
         public override Entity Copy()
         {
             MenuDialogue copy = (MenuDialogue)base.Copy();
-            copy.textDisplay = (TextBox)textDisplay.Copy();
-            copy.textName = (TextBox)textName.Copy();
+            copy._textDisplay = (TextBox)_textDisplay.Copy();
+            copy._textName = (TextBox)_textName.Copy();
             return copy;
         }
 
         public void Initialize()
         {
-            Program.ActiveHud.EntityList.Add(textDisplay);
-            Program.ActiveHud.EntityList.Add(textName);
+            Program.ActiveHud.EntityList.Add(_textDisplay);
+            Program.ActiveHud.EntityList.Add(_textName);
         }
 
         public override void Step()
         {
             base.Step();
-            if (displayDone)
+            if (_displayDone)
                 return;
-            if (stepCount <= 0)
+            if (_stepCount <= 0)
             {
-                if (displayIncrement >= displayText.Length)
+                if (_displayIncrement >= _displayText.Length)
                 {
-                    displayDone = true;
-                    Program.DialogueEngine.DisplayFinished();
+                    _displayDone = true;
+                    if (_blockIncrement == _textBlocks.Count - 1)
+                    {
+                        Program.DialogueEngine.DisplayFinished();
+                    }
                 }
                 else
                 {
-                    char currentChar = displayText[displayIncrement];
-                    if (skipChars.Any(item => item == currentChar))
+                    char currentChar = _displayText[_displayIncrement];
+                    if (_skipChars.Any(item => item == currentChar))
                     {
-                        displayIncrement++;
+                        _displayIncrement++;
                         Step();
                         return;
                     }
-                    if (speedUp)
+                    if (_speedUp)
                     {
-                        stepCount = 0;
-                        displayIncrement++;
+                        _stepCount = 0;
+                        _displayIncrement++;
                     }
-                    else if (pauseChars.Any(item => item == currentChar))
-                        stepCount = 16;
-                    else if (slowChars.Any(item => item == currentChar))
-                        stepCount = 8;
+                    else if (_pauseChars.Any(item => item == currentChar))
+                        _stepCount = 16;
+                    else if (_slowChars.Any(item => item == currentChar))
+                        _stepCount = 8;
                     else if (currentChar == ' ')
-                        stepCount = 5;
+                        _stepCount = 5;
                     else
-                        stepCount = 2;
-                    displayIncrement++;
+                        _stepCount = 2;
+                    _displayIncrement++;
 
-                    if (soundCooldown <= 0)
+                    if (_soundCooldown <= 0)
                     {
                         Program.QueueSound("speechBlip6");
-                        if (speedUp)
-                            soundCooldown = 3;
+                        if (_speedUp)
+                            _soundCooldown = 3;
                         else
-                            soundCooldown = 4;
+                            _soundCooldown = 4;
                     }
                 }
-                textDisplay.SetText(displayText.Substring(0, displayIncrement));
+                _textDisplay.SetText(_displayText.Substring(0, _displayIncrement));
             }
-            stepCount--;
-            soundCooldown--;
+            _stepCount--;
+            _soundCooldown--;
         }
 
+        /// <summary>
+        /// Display the given line of dialogue.
+        /// </summary>
+        /// <param name="line"></param>
         internal void Display(DialogueLine line)
         {
-            displayDone = false;
-            soundCooldown = 0;
-            stepCount = 0;
-            displayIncrement = 0;
-            displayText = Utility.WrapText(line.Text, 44);
-            displayText = displayText.Replace("\r", "");
+            //Set all variables to default values
+            _blockIncrement = 0;
+            _displayDone = false;
+            _soundCooldown = 0;
+            _stepCount = 0;
+            _displayIncrement = 0;
+            //Break the text up into blocks of wrapped text. Each block will be displayed seperately.
+            _textBlocks = Utility.WrapTextBlocks(line.Text, 44, 4);
+            //Set the first block to be displayed while removing unecessary carriage returns added by the text wrapping method
+            _displayText = _textBlocks[_blockIncrement].Replace("\r", "");
+
             if (line.Speaker != null)
             {
-                textName.SetText(line.Speaker.Name);
+                _textName.SetText(line.Speaker.Name);
             }
         }
 
         public override void Destroy()
         {
-            textDisplay.Destroy();
-            textName.Destroy();
+            _textDisplay.Destroy();
+            _textName.Destroy();
             base.Destroy();
         }
 
         public override void SetPosition(Vector position)
         {
-            textDisplay.SetPosition(new Vector(position.X + 2, position.Y + 7));
-            textName.SetPosition(new Vector(position.X + 1, position.Y + 3));
+            _textDisplay.SetPosition(new Vector(position.X + 2, position.Y + 7));
+            _textName.SetPosition(new Vector(position.X + 1, position.Y + 3));
             base.SetPosition(position);
         }
 
         public override void SetZLevel(int z)
         {
-            textDisplay.SetZLevel(z + 1);
-            textName.SetZLevel(z + 1);
+            _textDisplay.SetZLevel(z + 1);
+            _textName.SetZLevel(z + 1);
             base.SetZLevel(z);
         }
 
         public void WipeText()
         {
-            textDisplay.SetText("");
-            textName.SetText("");
+            _textDisplay.SetText("");
+            _textName.SetText("");
         }
 
         public void Up_Pressed() {  }
@@ -158,15 +172,33 @@ namespace SpaceExplorers
 
         public void Use_Pressed()
         {
-            if (displayDone && _stepCountMask <= 0 && _stepCountMove <= 0)
-                Program.DialogueEngine.Forward();
+            //check to see if current block is done, if not speed up text display
+            if (_displayDone && _stepCountMask <= 0 && _stepCountMove <= 0)
+            {
+                _blockIncrement++;
+                //check to see if we've finished displaying all blocks
+                if (_blockIncrement >= _textBlocks.Count)
+                {
+                    Program.DialogueEngine.Forward();
+                }
+                else
+                {
+                    _displayDone = false;
+                    _soundCooldown = 0;
+                    _stepCount = 0;
+                    _displayIncrement = 0;
+                    _displayText = _textBlocks[_blockIncrement].Replace("\r", ""); ;
+                }
+            }
             else
-                speedUp = true;
+            {
+                _speedUp = true;
+            }
         }
 
         public void Use_Released()
         {
-            speedUp = false;
+            _speedUp = false;
         }
     }
 }
