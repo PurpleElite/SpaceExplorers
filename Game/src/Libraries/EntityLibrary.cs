@@ -92,6 +92,8 @@ namespace SpaceExplorers
             if ((anim = AnimationLibrary.Create("HavishamRunSW")) != null) AHavisham.AddAnimation(anim.Type, anim);
             if ((anim = AnimationLibrary.Create("HavishamRunS")) != null) AHavisham.AddAnimation(anim.Type, anim);
             if ((anim = AnimationLibrary.Create("HavishamRunSE")) != null) AHavisham.AddAnimation(anim.Type, anim);
+            if ((anim = AnimationLibrary.Create("AHavishamIdleE")) != null) AHavisham.AddAnimation(anim.Type, anim);
+            if ((anim = AnimationLibrary.Create("AHavishamIdleW")) != null) AHavisham.AddAnimation(anim.Type, anim);
             AHavisham.SetCollisionBounds(collisionBoundsHavisham);
             Entities.Add(AHavisham.GetID(), AHavisham);
 
@@ -104,7 +106,8 @@ namespace SpaceExplorers
             TextureLibrary.Textures.Add("Sgt JBreech.png", new Texture(new Image("Images\\Sgt JBreech.png")));
             TextureLibrary.Textures.Add("Sgt JBreech portrait.png", new Texture(new Image("Images\\Sgt JBreech portrait.png")));
             Actor JBreech = new Actor("JBreech", "Jonathan Breech", new Vector(50, 50), "Sgt JBreech.png", "Sgt JBreech portrait.png", 2);
-            if ((anim = AnimationLibrary.Create("BreechWind")) != null) JBreech.AddAnimation(anim.Type, anim);
+            if ((anim = AnimationLibrary.Create("JBreechIdleE")) != null) JBreech.AddAnimation(anim.Type, anim);
+            if ((anim = AnimationLibrary.Create("JBreechIdleW")) != null) JBreech.AddAnimation(anim.Type, anim);
             JBreech.SetCollisionBounds(collisionBoundsBreech);
             Entities.Add(JBreech.GetID(), JBreech);
 

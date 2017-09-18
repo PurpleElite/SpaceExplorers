@@ -1,2 +1,2 @@
-type = Idle
-stepDuration = 6
+type = IdleE
+stepDur = 6

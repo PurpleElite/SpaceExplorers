@@ -10,6 +10,7 @@ namespace SpaceExplorers
 {
     static class AnimationLibrary
     {
+        static int defaultStepDuration = 8;
         public static Dictionary<string, Animation> Animations = new Dictionary<string, Animation>();
 
         public static void Initialize()
@@ -20,7 +21,9 @@ namespace SpaceExplorers
             {
                 string animName = Path.GetFileName(animDir);
                 AnimType type = (AnimType)(-1);
-                int frameDuration = 8;
+                //-1 specifies that default value should be used.
+                int stepDur = -1;
+                int[] stepDurArr = { };
                 try {
                     //Following block borrowed from user A876 on stackoverflow.com
                     using (StreamReader reader = new StreamReader(Path.Combine(animDir, "config.txt")))  // Open the file for reading (and auto-close).
@@ -41,20 +44,46 @@ namespace SpaceExplorers
 
                             // IF a desired parameter is specified, collect it:
                             if (sParameter == "type")
-                                type = (AnimType) Enum.Parse(typeof(AnimType), sValue);
-                            else if (sParameter == "stepDuration")
-                                frameDuration = int.Parse(sValue);
+                                type = (AnimType)Enum.Parse(typeof(AnimType), sValue);
+                            else if (sParameter == "stepDur")
+                                stepDur = int.Parse(sValue);
+                            else if (sParameter == "stepDurArr")
+                            {
+                                string[] temp = sValue.Split(new char[] { '[', ',', ']' }, StringSplitOptions.RemoveEmptyEntries);
+                                stepDurArr = new int[temp.Length];
+                                for (int j = 0; j < temp.Length; j++)
+                                {
+                                    stepDurArr[j] = int.Parse(temp[j]);
+                                }
+                            }
                         } // end while
                     } // end using
                     if (Enum.IsDefined(typeof(AnimType), type))
                     {
                         Animation newAnim = new Animation(animName, type);
                         string[] frames = Directory.GetFiles(animDir, "frame*");
-                        foreach (string framePath in frames)
+                        for (int i = 0; i < frames.Length; i++)
                         {
+                            // Get the texture
+                            string framePath = frames[i];
                             string frameName = Path.GetFileName(framePath);
                             TextureLibrary.Textures.Add(animName + frameName, new Texture(new Image(framePath)));
-                            newAnim.Frames.Add(new Animation.Frame(animName + frameName, frameDuration));
+                            // Determine the step duration
+                            int stepDuration;
+                            if (stepDurArr.Length > i && stepDurArr[i] != -1)
+                            {
+                                stepDuration = stepDurArr[i];
+                            }
+                            else if (stepDur != -1)
+                            {
+                                stepDuration = stepDur;
+                            }
+                            else
+                            {
+                                stepDuration = defaultStepDuration;
+                            }
+                            // Add the frame to the animation
+                            newAnim.Frames.Add(new Animation.Frame(animName + frameName, stepDuration));
                         }
                         Animations.Add(newAnim.ID, newAnim);
                     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SpaceExplorers
 {
-    public enum AnimType : int { Idle, RunN, RunNE, RunE, RunSE, RunS, RunSW, RunW, RunNW };
+    public enum AnimType : int { Idle, IdleE, IdleW, RunN, RunNE, RunE, RunSE, RunS, RunSW, RunW, RunNW };
 
     static public class AnimationType
     {

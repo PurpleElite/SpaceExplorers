@@ -24,23 +24,26 @@ namespace SpaceExplorers
         /// </summary>
         /// <param name="player"></param>
         /// <param name="npc"></param>
-        public void RunDialogue(Entity player, Entity npc)
+        public void RunDialogue(Actor player, Actor npc)
         {
-            //If no dialogue exists between the player and the npc, abort
+            // If no dialogue exists between the player and the npc, abort
             _currentLine = DialogueLibrary.Dialogues.GetOrNull(new DialogueLibrary.DialogueKey(player, npc));
             if (_currentLine == null) return;
-            //Stop the player's movement
+            // Stop the player's movement
             player.Velocity = new Vector(0, 0);
-            //Set it so that the player cant push the dialogue forward until the text is done displaying
+            // Set it so that the player cant push the dialogue forward until the text is done displaying
             _done = false;
+            // Initiliaze the box the character portrait sits in
             _dialoguePortraitBack = (HudEntity)EntityLibrary.Create("DialoguePortraitBack", new Vector(214, 270));
             _dialoguePortraitBack.TransformMove(new Vector(214, 200), _popupTime);
             _dialoguePortraitBack.CreateTimer(delegate { _dialoguePortraitBack.TransformMove(new Vector(81, 200), _slideTime); }, _popupTime);
             _dialoguePortraitBack.SetZLevel(10);
             Program.ActiveHud.AddEntity(_dialoguePortraitBack);
+            // Initialize the character portrait
             _dialoguePortrait = new HudEntity("DialoguePortrait", new Vector(40, 40), null);
             _dialoguePortrait.SetZLevel(11);
             Program.ActiveHud.AddEntity(_dialoguePortrait);
+            // Initialize the box that houses the dialogue
             _dialogueBox = (MenuDialogue)EntityLibrary.Create("DialogueBox", new Vector(262, 270));
             _dialogueBox.MaskRect = new SFML.Graphics.FloatRect(270, 0, 0, 56);
             _dialogueBox.Initialize();
@@ -49,8 +52,18 @@ namespace SpaceExplorers
             _dialogueBox.CreateTimer(delegate { _dialogueBox.TransformMask(new SFML.Graphics.FloatRect(0, 0, 270, 56), _slideTime); }, _popupTime);
             _dialogueBox.SetZLevel(9);
             Program.ActiveHud.AddEntity(_dialogueBox);
+            // Send user input to the dialogue box
             Program.Controller.Set_Control(_dialogueBox);
+            // Set a timer for the dialogue box's entry into the screen
             _dialoguePortraitBack.CreateTimer(Forward, _slideTime + _popupTime);
+
+            // Make the actors face eachother
+            Vector point1 = player.Position;
+            Vector point2 = npc.Position;
+            Vector difference = point2 - point1;
+            player.SetFacing(difference.GetDirection());
+            difference = point1 - point2;
+            npc.SetFacing(difference.GetDirection());
         }
 
         public void Forward()

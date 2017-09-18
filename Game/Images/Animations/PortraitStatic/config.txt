@@ -1,0 +1,2 @@
+type = IdleE
+stepDur = 2

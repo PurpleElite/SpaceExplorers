@@ -81,7 +81,7 @@ namespace SpaceExplorers
             Controller.Set_Control(AHavisham);
             defaultCamera.Set_Focus(AHavisham);
             Actor JBreech = (Actor)EntityLibrary.Create("JBreech", new Vector(150, 200));
-            Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue(char1, char2);
+            Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue((Actor)char1, (Actor)char2);
             JBreech.InitializeInteraction(new Vector(26, 47), dialogue);
             ActiveRoom.EntityList.Add(JBreech);
 

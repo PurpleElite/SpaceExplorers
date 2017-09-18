@@ -47,9 +47,8 @@ namespace SpaceExplorers
             return result.WillIntersect;
         }
 
-        public void Interaction(Actor user)
+        public virtual void Interaction(Actor user)
         {
-            Console.WriteLine("Interaction with " + ID);
             InteractAction.Invoke(user, this);
         }
 

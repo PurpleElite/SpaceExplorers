@@ -32,7 +32,7 @@ namespace SpaceExplorers
             Size = size;
             Velocity = new Vector(0, 0);
             PortraitKey = portraitKey;
-            this._speed = speed;
+            _speed = speed;
         }
 
         // --Public Methods--
@@ -40,6 +40,27 @@ namespace SpaceExplorers
         {
             Actor copy = (Actor)base.Copy();
             return copy;
+        }
+
+        public void SetFacing(double angle)
+        {
+            angle %= 360;
+            if (angle > 180 && angle <= 360)
+            {
+                _verticalHeading = Direction.N;
+            }
+            else
+            {
+                _verticalHeading = Direction.S;
+            }
+            if (angle > 270 || angle <= 90)
+            {
+                _horizontalHeading = Direction.E;
+            }
+            else
+            {
+                _horizontalHeading = Direction.W;
+            }
         }
 
         public override void Step()
@@ -54,6 +75,7 @@ namespace SpaceExplorers
         {
             if (Velocity.Magnitude > 0)
             {
+                // Moving
                 if (AnimationType.IsMovement(_animation))
                 {
                     _runFrame = _animation.CurrentIndex;
@@ -121,14 +143,30 @@ namespace SpaceExplorers
             }
             else
             {
+                // Stationary
                 _runFrame = 0;
-                if (Animations.ContainsKey(AnimType.Idle))
+                // Determine facing and play appropriate idle animation
+                if (_horizontalHeading == Direction.E)
                 {
-                    _animation = Animations[AnimType.Idle];
+                    if (Animations.ContainsKey(AnimType.IdleE))
+                    {
+                        _animation = Animations[AnimType.IdleE];
+                    }
+                    else
+                    {
+                        _animation = null;
+                    }
                 }
-                else
+                if (_horizontalHeading == Direction.W)
                 {
-                    _animation = null;
+                    if (Animations.ContainsKey(AnimType.IdleW))
+                    {
+                        _animation = Animations[AnimType.IdleW];
+                    }
+                    else
+                    {
+                        _animation = null;
+                    }
                 }
             }
         }

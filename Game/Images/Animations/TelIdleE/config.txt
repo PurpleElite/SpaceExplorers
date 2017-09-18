@@ -1,0 +1,2 @@
+type = IdleE
+stepDurArr = [240,120]
