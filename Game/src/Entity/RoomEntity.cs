@@ -11,6 +11,7 @@ namespace SpaceExplorers
     {
         protected Polygon collisionBounds;
         public bool CollisionDetection = false;
+        public bool Immobile = false;
 
         // --Constructors--
 
@@ -43,7 +44,10 @@ namespace SpaceExplorers
         {
             Polygon candidate = obj.GetCollisionBounds();
             Polygon.PolygonCollisionResult result = collisionBounds.PolygonCollision(candidate, Velocity);
-            Velocity += result.MinimumTranslationVector;
+            if (!Immobile)
+            {
+                Velocity += result.MinimumTranslationVector;
+            }
             return result.WillIntersect;
         }
 
@@ -90,17 +94,20 @@ namespace SpaceExplorers
 
         public void SetVelocity(Vector velocity)
         {
-            Velocity = velocity;
+            if (!Immobile)
+                Velocity = velocity;
         }
 
         public void SetXVelocity(float xVelocity)
         {
-            Velocity.X = xVelocity;
+            if (!Immobile)
+                Velocity.X = xVelocity;
         }
 
         public void SetYVelocity(float yVelocity)
         {
-            Velocity.Y = yVelocity;
+            if (!Immobile)
+                Velocity.Y = yVelocity;
         }
 
         public override void SetZLevel(int z)
