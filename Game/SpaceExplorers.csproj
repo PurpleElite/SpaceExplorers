@@ -262,16 +262,16 @@
     <Content Include="Images\Objects\CryoMod.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Objects\DirtFore Beacon.png">
+    <Content Include="Images\Objects\DirtForeBeacon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Objects\DirtFore Beacon2.png">
+    <Content Include="Images\Objects\DirtForeBeacon2.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Objects\Garden.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Images\Objects\MedModule.png">
+    <Content Include="Images\Objects\MedMod.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Images\Objects\NuclearBeaconWire.png">
