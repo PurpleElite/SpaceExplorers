@@ -13,7 +13,7 @@ namespace SpaceExplorers
 		public float X;
 		public float Y;
 
-		static public Vector FromPoint(int x, int y) {
+        static public Vector FromPoint(int x, int y) {
 			return new Vector(x, y);
 		}
 
@@ -131,5 +131,21 @@ namespace SpaceExplorers
 				return ToString();
 			}
 		}
-	}
+
+        public bool EqualsThreshold(Vector newPoint)
+        {
+
+            double dDeff_X =
+                Math.Abs(X - newPoint.X);
+            double dDeff_Y =
+                Math.Abs(Y - newPoint.Y);
+
+            if ((dDeff_X < 0.00001)
+                && (dDeff_Y < 0.00001))
+                return true;
+            else
+                return false;
+
+        }
+    }
 }

@@ -148,6 +148,7 @@
     <Compile Include="src\Interfaces\IRenderable.cs" />
     <Compile Include="src\Entity\MenuDialogue.cs" />
     <Compile Include="src\Entity\RoomEntity.cs" />
+    <Compile Include="src\LineSegment.cs" />
     <Compile Include="src\Polygon.cs" />
     <Compile Include="src\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
