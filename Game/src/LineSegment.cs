@@ -221,14 +221,14 @@ namespace SpaceExplorers
     {
         //line: ax+by+c=0, with start point and end point
         //direction from start point ->end point
-        private Vector m_startPoint;
-        private Vector m_endPoint;
+        private Vector startPoint;
+        private Vector endPoint;
 
         public Vector StartPoint
         {
             get
             {
-                return m_startPoint;
+                return startPoint;
             }
         }
 
@@ -236,31 +236,31 @@ namespace SpaceExplorers
         {
             get
             {
-                return m_endPoint;
+                return endPoint;
             }
         }
 
         public CLineSegment(Vector startPoint, Vector endPoint)
             : base(startPoint, endPoint)
         {
-            this.m_startPoint = startPoint;
-            this.m_endPoint = endPoint;
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
         }
 
         /*** chagne the line's direction ***/
         public void ChangeLineDirection()
         {
             Vector tempPt;
-            tempPt = this.m_startPoint;
-            this.m_startPoint = this.m_endPoint;
-            this.m_endPoint = tempPt;
+            tempPt = this.startPoint;
+            this.startPoint = this.endPoint;
+            this.endPoint = tempPt;
         }
 
         /*** To calculate the line segment length:   ***/
         public double GetLineSegmentLength()
         {
-            double d = (m_endPoint.X - m_startPoint.X) * (m_endPoint.X - m_startPoint.X);
-            d += (m_endPoint.Y - m_startPoint.Y) * (m_endPoint.Y - m_startPoint.Y);
+            double d = (endPoint.X - startPoint.X) * (endPoint.X - startPoint.X);
+            d += (endPoint.Y - startPoint.Y) * (endPoint.Y - startPoint.Y);
             d = Math.Sqrt(d);
 
             return d;
@@ -277,11 +277,11 @@ namespace SpaceExplorers
         public int GetPointLocation(Vector point)
         {
             double Ax, Ay, Bx, By, Cx, Cy;
-            Bx = m_endPoint.X;
-            By = m_endPoint.Y;
+            Bx = endPoint.X;
+            By = endPoint.Y;
 
-            Ax = m_startPoint.X;
-            Ay = m_startPoint.Y;
+            Ax = startPoint.X;
+            Ay = startPoint.Y;
 
             Cx = point.X;
             Cy = point.Y;
@@ -298,7 +298,7 @@ namespace SpaceExplorers
             else //Not a horizontal line
             {
                 //make the line direction bottom->up
-                if (m_endPoint.Y > m_startPoint.Y)
+                if (endPoint.Y > startPoint.Y)
                     this.ChangeLineDirection();
 
                 double L = this.GetLineSegmentLength();
@@ -317,33 +317,33 @@ namespace SpaceExplorers
         /***Get the minimum x value of the points in the line***/
         public double GetXmin()
         {
-            return Math.Min(m_startPoint.X, m_endPoint.X);
+            return Math.Min(startPoint.X, endPoint.X);
         }
 
         /***Get the maximum  x value of the points in the line***/
         public double GetXmax()
         {
-            return Math.Max(m_startPoint.X, m_endPoint.X);
+            return Math.Max(startPoint.X, endPoint.X);
         }
 
         /***Get the minimum y value of the points in the line***/
         public double GetYmin()
         {
-            return Math.Min(m_startPoint.Y, m_endPoint.Y);
+            return Math.Min(startPoint.Y, endPoint.Y);
         }
 
         /***Get the maximum y value of the points in the line***/
         public double GetYmax()
         {
-            return Math.Max(m_startPoint.Y, m_endPoint.Y);
+            return Math.Max(startPoint.Y, endPoint.Y);
         }
 
         /***Check whether this line is in a longer line***/
         public bool InLine(CLineSegment longerLineSegment)
         {
             bool bInLine = false;
-            if ((longerLineSegment.InLine(m_startPoint)) &&
-                (longerLineSegment.InLine(m_endPoint)))
+            if ((longerLineSegment.InLine(startPoint)) &&
+                (longerLineSegment.InLine(endPoint)))
                 bInLine = true;
             return bInLine;
         }
@@ -393,37 +393,37 @@ namespace SpaceExplorers
             Vector newStartPoint = new Vector();
             Vector newEndPoint = new Vector();
 
-            double alphaInRad = this.GetLineAngle(); // 0-PI
+            double alphaInRad = GetLineAngle(); // 0-PI
             if (rightOrDown)
             {
-                if (this.HorizontalLine()) //offset to y+ direction
+                if (HorizontalLine()) //offset to y+ direction
                 {
-                    newStartPoint.X = this.m_startPoint.X;
-                    newStartPoint.Y = this.m_startPoint.Y + distance;
+                    newStartPoint.X = startPoint.X;
+                    newStartPoint.Y = startPoint.Y + (float)distance;
 
-                    newEndPoint.X = this.m_endPoint.X;
-                    newEndPoint.Y = this.m_endPoint.Y + distance;
+                    newEndPoint.X = endPoint.X;
+                    newEndPoint.Y = endPoint.Y + (float)distance;
                     line = new CLineSegment(newStartPoint, newEndPoint);
                 }
                 else //offset to x+ direction
                 {
                     if (Math.Sin(alphaInRad) > 0)
                     {
-                        newStartPoint.X = m_startPoint.X + Math.Abs(distance * Math.Sin(alphaInRad));
-                        newStartPoint.Y = m_startPoint.Y - Math.Abs(distance * Math.Cos(alphaInRad));
+                        newStartPoint.X = startPoint.X + (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newStartPoint.Y = startPoint.Y - (float)Math.Abs(distance * Math.Cos(alphaInRad));
 
-                        newEndPoint.X = m_endPoint.X + Math.Abs(distance * Math.Sin(alphaInRad));
-                        newEndPoint.Y = m_endPoint.Y - Math.Abs(distance * Math.Cos(alphaInRad));
+                        newEndPoint.X = endPoint.X + (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newEndPoint.Y = endPoint.Y - (float)Math.Abs(distance * Math.Cos(alphaInRad));
 
                         line = new CLineSegment(
                                        newStartPoint, newEndPoint);
                     }
                     else //sin(FalphaInRad)<0
                     {
-                        newStartPoint.X = m_startPoint.X + Math.Abs(distance * Math.Sin(alphaInRad));
-                        newStartPoint.Y = m_startPoint.Y + Math.Abs(distance * Math.Cos(alphaInRad));
-                        newEndPoint.X = m_endPoint.X + Math.Abs(distance * Math.Sin(alphaInRad));
-                        newEndPoint.Y = m_endPoint.Y + Math.Abs(distance * Math.Cos(alphaInRad));
+                        newStartPoint.X = startPoint.X + (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newStartPoint.Y = startPoint.Y + (float)Math.Abs(distance * Math.Cos(alphaInRad));
+                        newEndPoint.X = endPoint.X + (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newEndPoint.Y = endPoint.Y + (float)Math.Abs(distance * Math.Cos(alphaInRad));
 
                         line = new CLineSegment(
                             newStartPoint, newEndPoint);
@@ -434,11 +434,11 @@ namespace SpaceExplorers
             {
                 if (this.HorizontalLine()) //offset to y directin
                 {
-                    newStartPoint.X = m_startPoint.X;
-                    newStartPoint.Y = m_startPoint.Y - distance;
+                    newStartPoint.X = startPoint.X;
+                    newStartPoint.Y = startPoint.Y - (float)distance;
 
-                    newEndPoint.X = m_endPoint.X;
-                    newEndPoint.Y = m_endPoint.Y - distance;
+                    newEndPoint.X = endPoint.X;
+                    newEndPoint.Y = endPoint.Y - (float)distance;
                     line = new CLineSegment(
                         newStartPoint, newEndPoint);
                 }
@@ -446,20 +446,20 @@ namespace SpaceExplorers
                 {
                     if (Math.Sin(alphaInRad) >= 0)
                     {
-                        newStartPoint.X = m_startPoint.X - Math.Abs(distance * Math.Sin(alphaInRad));
-                        newStartPoint.Y = m_startPoint.Y + Math.Abs(distance * Math.Cos(alphaInRad));
-                        newEndPoint.X = m_endPoint.X - Math.Abs(distance * Math.Sin(alphaInRad));
-                        newEndPoint.Y = m_endPoint.Y + Math.Abs(distance * Math.Cos(alphaInRad));
+                        newStartPoint.X = startPoint.X - (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newStartPoint.Y = startPoint.Y + (float)Math.Abs(distance * Math.Cos(alphaInRad));
+                        newEndPoint.X = endPoint.X - (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newEndPoint.Y = endPoint.Y + (float)Math.Abs(distance * Math.Cos(alphaInRad));
 
                         line = new CLineSegment(
                             newStartPoint, newEndPoint);
                     }
                     else //sin(FalphaInRad)<0
                     {
-                        newStartPoint.X = m_startPoint.X - Math.Abs(distance * Math.Sin(alphaInRad));
-                        newStartPoint.Y = m_startPoint.Y - Math.Abs(distance * Math.Cos(alphaInRad));
-                        newEndPoint.X = m_endPoint.X - Math.Abs(distance * Math.Sin(alphaInRad));
-                        newEndPoint.Y = m_endPoint.Y - Math.Abs(distance * Math.Cos(alphaInRad));
+                        newStartPoint.X = startPoint.X - (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newStartPoint.Y = startPoint.Y - (float)Math.Abs(distance * Math.Cos(alphaInRad));
+                        newEndPoint.X = endPoint.X - (float)Math.Abs(distance * Math.Sin(alphaInRad));
+                        newEndPoint.Y = endPoint.Y - (float)Math.Abs(distance * Math.Cos(alphaInRad));
 
                         line = new CLineSegment(
                             newStartPoint, newEndPoint);
@@ -474,18 +474,18 @@ namespace SpaceExplorers
 		*********************************************************/
         public bool IntersectedWith(CLineSegment line)
         {
-            double x1 = this.m_startPoint.X;
-            double y1 = this.m_startPoint.Y;
-            double x2 = this.m_endPoint.X;
-            double y2 = this.m_endPoint.Y;
-            double x3 = line.m_startPoint.X;
-            double y3 = line.m_startPoint.Y;
-            double x4 = line.m_endPoint.X;
-            double y4 = line.m_endPoint.Y;
+            double x1 = this.startPoint.X;
+            double y1 = this.startPoint.Y;
+            double x2 = this.endPoint.X;
+            double y2 = this.endPoint.Y;
+            double x3 = line.startPoint.X;
+            double y3 = line.startPoint.Y;
+            double x4 = line.endPoint.X;
+            double y4 = line.endPoint.Y;
 
             double de = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
             //if de<>0 then //lines are not parallel
-            if (Math.Abs(de - 0) < ConstantValue.SmallValue) //not parallel
+            if (Math.Abs(de - 0) < 0.00001) //not parallel
             {
                 double ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / de;
                 double ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / de;

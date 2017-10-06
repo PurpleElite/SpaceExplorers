@@ -116,12 +116,14 @@ namespace SpaceExplorers
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("NuclearBeaconWire", new Vector(448, 494)));
             ActiveRoom.EntityList.Add((Actor)EntityLibrary.Create("Jacob", new Vector(370, 400)));
             Actor AHavisham = (Actor)EntityLibrary.Create("AHavisham", new Vector(100, 350));
+            AHavisham.InteractPoint = new Vector(25, 47);
             ActiveRoom.EntityList.Add(AHavisham);
             Controller.Set_Control(AHavisham);
             defaultCamera.Set_Focus(AHavisham);
             Actor JBreech = (Actor)EntityLibrary.Create("JBreech", new Vector(150, 350));
             Action<Entity, Entity> dialogue = (char1, char2) => DialogueEngine.RunDialogue((Actor)char1, (Actor)char2);
-            JBreech.InitializeInteraction(new Vector(26, 47), dialogue);
+            JBreech.InitializeInteraction(dialogue);
+            JBreech.InteractPoint = new Vector(26, 47);
             ActiveRoom.EntityList.Add(JBreech);
 
             // Load in the music. Only do this once as well.

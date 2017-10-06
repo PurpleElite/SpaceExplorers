@@ -71,7 +71,7 @@ namespace SpaceExplorers {
             Polygon copy = new Polygon();
             foreach (var point in Points)
             {
-                copy.Points.Add(point);
+                copy.Points.Add(point.Copy());
             }
             copy.BuildEdges();
             return copy;
@@ -228,58 +228,114 @@ namespace SpaceExplorers {
             }
         }
 
+        public List<Polygon> MakeConvex()
+        {
+            List<Polygon> ret;
+
+            if (GetPolygonType() == PolygonType.Convex)
+            {
+                ret = new List<Polygon>
+                {
+                    this
+                };
+            }
+            else
+            {
+                ret = new List<Polygon>();
+                Polygon copy = Copy();
+
+                bool done = false;
+                if (copy.Points.Count == 3) //triangle, don't have to cut ear
+                {
+                    done = true;
+                    ret.Add(this);
+                }
+
+                int i;
+                while (done == false) //UpdatedPolygon
+                {
+                    i = 0;
+                    bool notFound = true;
+                    while (notFound
+                        && (i < copy.Points.Count)) //loop till find an ear
+                    {
+                        if (copy.IsEar(i))
+                            notFound = false; //got one, pt is an ear
+                        else
+                            i++;
+                    } //bNotFound
+                      //An ear found:}
+                    if (copy.Points[i] != null)
+                    {
+                        Polygon triangle = new Polygon();
+                        triangle.Points.Add(copy.Points[i].Copy());
+                        triangle.Points.Add(copy.Points[Utility.ValueWrap(i + 1, copy.Points.Count)].Copy());
+                        triangle.Points.Add(copy.Points[Utility.ValueWrap(i - 1, copy.Points.Count)].Copy());
+                        triangle.BuildEdges();
+                        ret.Add(triangle);
+                        copy.Points.RemoveAt(i);
+                    }
+
+                    if (copy.GetPolygonType() == PolygonType.Convex)
+                    {
+                        done = true;
+                        copy.BuildEdges();
+                        ret.Add(copy);
+                    }
+                }
+            }
+            return ret;
+        }
+
         public List<Polygon> Triangulate()
         {
             List<Polygon> ret = new List<Polygon>();
+            Polygon copy = Copy();
 
             bool done = false;
-
-            if (GetPolygonType() == PolygonType.Convex) //don't have to cut ear
+            if (copy.Points.Count == 3) //triangle, don't have to cut ear
             {
                 done = true;
                 ret.Add(this);
             }
 
-            if (Points.Count == 3) //triangle, don't have to cut ear
-            {
-                done = true;
-                ret.Add(this);
-            }
-
+            int i;
             while (done == false) //UpdatedPolygon
             {
-                int i = 0;
-                bool bNotFound = true;
-                while (bNotFound
-                    && (i < Points.Count)) //loop till find an ear
+                i = 0;
+                bool notFound = true;
+                while (notFound
+                    && (i < copy.Points.Count)) //loop till find an ear
                 {
-                    if (IsEarOfUpdatedPolygon(i))
-                        bNotFound = false; //got one, pt is an ear
+                    if (copy.IsEar(i))
+                        notFound = false; //got one, pt is an ear
                     else
                         i++;
                 } //bNotFound
                   //An ear found:}
-                if (Points[i] != null)
+                if (copy.Points[i] != null)
                 {
-                    Points.RemoveAt(i);
-                    BuildEdges();
                     Polygon triangle = new Polygon();
-                    triangle.Points.Add(Points[i]);
-                    triangle.Points.Add(Points[(i + 1) % Points.Count]);
-                    triangle.Points.Add(Points[(i - 1) % Points.Count]);
+                    triangle.Points.Add(copy.Points[i].Copy());
+                    triangle.Points.Add(copy.Points[Utility.ValueWrap(i + 1, copy.Points.Count)].Copy());
+                    triangle.Points.Add(copy.Points[Utility.ValueWrap(i - 1, copy.Points.Count)].Copy());
                     triangle.BuildEdges();
                     ret.Add(triangle);
+                    copy.Points.RemoveAt(i);
                 }
 
-                if (Points.Count == 3)
+                if (copy.Points.Count == 3)
+                {
                     done = true;
+                    copy.BuildEdges();
+                    ret.Add(copy);
+                }
             }
             return ret;
         }
 
         /// <summary>
         /// Checks to see if a polygon is convex or concave, does not work on self-intersecting polygons.
-        /// 
         /// </summary>
         /// <returns>An enum for the type of the polygon.</returns>
         public PolygonType GetPolygonType()
@@ -327,15 +383,15 @@ namespace SpaceExplorers {
 		If it is an ear, return true,
 		If it is not an ear, return false;
 		*****************************************************************/
-        private bool IsEarOfUpdatedPolygon(int index)
+        private bool IsEar(int index)
         {
             bool ear = true;
             if (PolygonVertexType(index) == VertexType.ConvexPoint)
             {
                 List<Vector> trianglePoints = new List<Vector>();
                 trianglePoints.Add(Points[index]);
-                trianglePoints.Add(Points[(index - 1) % Points.Count]);
-                trianglePoints.Add(Points[(index + 1) % Points.Count]);
+                trianglePoints.Add(Points[Utility.ValueWrap(index - 1, Points.Count)]);
+                trianglePoints.Add(Points[Utility.ValueWrap(index + 1, Points.Count)]);
 
                 for (int i = 0; i < Points.Count; i++)
                 {
@@ -362,9 +418,9 @@ namespace SpaceExplorers {
             VertexType vertexType = VertexType.ErrorPoint;
 
             List<Vector> trianglePoints = new List<Vector>();
+            trianglePoints.Add(Points[Utility.ValueWrap(index - 1, Points.Count)]);
             trianglePoints.Add(Points[index]);
-            trianglePoints.Add(Points[(index - 1) % Points.Count]);
-            trianglePoints.Add(Points[(index + 1) % Points.Count]);
+            trianglePoints.Add(Points[Utility.ValueWrap(index + 1, Points.Count)]);
 
             double area = PolygonArea(trianglePoints);
 

@@ -66,5 +66,13 @@ namespace SpaceExplorers
             }
             return blocks;
         }
+
+        public static int ValueWrap(int value, int mod)
+        {
+            var newValue = value % mod;
+            return newValue < 0 ?
+                mod + newValue :
+                newValue;
+        }
     }
 }

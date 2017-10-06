@@ -147,5 +147,10 @@ namespace SpaceExplorers
                 return false;
 
         }
+
+        public Vector Copy()
+        {
+            return (Vector)MemberwiseClone();
+        }
     }
 }

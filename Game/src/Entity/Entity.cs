@@ -64,6 +64,7 @@ namespace SpaceExplorers
             this.ID = ID;
             Position = new Vector(0, 0);
             Size = size;
+            InteractPoint = new Vector(Size.X / 2, Size.Y / 2);
             _timers = new List<TimerAction>();
             Animations = new Dictionary<AnimType, Animation>();
         }
@@ -73,6 +74,7 @@ namespace SpaceExplorers
             ID = "Default";
             Position = new Vector (0, 0);
             Size = new Vector(0, 0);
+            InteractPoint = new Vector(0, 0);
             _timers = new List<TimerAction>();
             Animations = new Dictionary<AnimType, Animation>();
         }
@@ -121,9 +123,8 @@ namespace SpaceExplorers
             return new Renderable(null);
         }
 
-        public void InitializeInteraction(Vector location, Action<Entity, Entity> action)
+        public void InitializeInteraction(Action<Entity, Entity> action)
         {
-            InteractPoint = location;
             InteractAction = action;
             Interactable = true;
         }

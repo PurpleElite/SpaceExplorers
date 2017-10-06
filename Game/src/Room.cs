@@ -85,12 +85,12 @@ namespace SpaceExplorers
                     if (target == null)
                     {
                         target = ent;
-                        minDistance = user.GetCollisionBounds().Center.DistanceTo(ent.InteractPoint);
+                        minDistance = user.InteractPoint.DistanceTo(ent.InteractPoint);
                     }
-                    else if (user.GetCollisionBounds().Center.DistanceTo(ent.InteractPoint) < minDistance)
+                    else if (user.InteractPoint.DistanceTo(ent.InteractPoint) < minDistance)
                     {
                         target = ent;
-                        minDistance = user.GetCollisionBounds().Center.DistanceTo(ent.InteractPoint);
+                        minDistance = user.InteractPoint.DistanceTo(ent.InteractPoint);
                     }
                 }
             }

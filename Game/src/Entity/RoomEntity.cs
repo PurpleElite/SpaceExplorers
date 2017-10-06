@@ -9,7 +9,7 @@ namespace SpaceExplorers
 {
     public class RoomEntity : Entity
     {
-        protected Polygon collisionBounds;
+        protected List<Polygon> collisionBounds;
         public bool CollisionDetection = false;
         public bool Immobile = false;
 
@@ -31,7 +31,13 @@ namespace SpaceExplorers
             RoomEntity copy = (RoomEntity)base.Copy();
             copy.Velocity = new Vector(Velocity.X, Velocity.Y);
             if (CollisionDetection)
-                copy.collisionBounds = collisionBounds.Copy();
+            {
+                copy.collisionBounds = new List<Polygon>();
+                foreach(var bound in collisionBounds)
+                {
+                    copy.collisionBounds.Add(bound.Copy());
+                }
+            }
             return copy;
         }
 
@@ -42,13 +48,21 @@ namespace SpaceExplorers
 
         public virtual bool Collision_Check(RoomEntity obj)
         {
-            Polygon candidate = obj.GetCollisionBounds();
-            Polygon.PolygonCollisionResult result = collisionBounds.PolygonCollision(candidate, Velocity);
-            if (!Immobile)
+            bool willIntersect = false;
+            List<Polygon> candidates = obj.GetCollisionBounds();
+            foreach (var candidate in candidates)
             {
-                Velocity += result.MinimumTranslationVector;
+                foreach (var bound in collisionBounds)
+                {
+                    Polygon.PolygonCollisionResult result = bound.PolygonCollision(candidate, Velocity);
+                    if (!Immobile)
+                    {
+                        Velocity += result.MinimumTranslationVector;
+                        willIntersect |= result.WillIntersect;
+                    }
+                }
             }
-            return result.WillIntersect;
+            return willIntersect;
         }
 
         public virtual void Interaction(Actor user)
@@ -72,7 +86,7 @@ namespace SpaceExplorers
             return Velocity.Y;
         }
 
-        public Polygon GetCollisionBounds()
+        public List<Polygon> GetCollisionBounds()
         {
             return collisionBounds;
         }
@@ -88,7 +102,10 @@ namespace SpaceExplorers
         {
             Vector difference = position - Position;
             if (CollisionDetection)
-                collisionBounds.Offset(difference);
+            {
+                foreach(var bound in collisionBounds)
+                    bound.Offset(difference);
+            }
             base.SetPosition(position);
         }
 
@@ -119,8 +136,9 @@ namespace SpaceExplorers
         public void SetCollisionBounds(Polygon bounds)
         {
             CollisionDetection = true;
-            collisionBounds = bounds;
-            collisionBounds.Offset(Position);
+            collisionBounds = bounds.Copy().MakeConvex();
+            foreach(var bound in collisionBounds)
+                bound.Offset(Position);
         }
     }
 }

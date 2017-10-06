@@ -197,16 +197,28 @@ namespace SpaceExplorers
             switch (_keyRecent)
             {
                 case Direction.N:
-                    interactArea = new FloatRect(collisionBounds.Center.X - _interactSize* 1.5f / 2, collisionBounds.Center.Y - _interactSize, _interactSize * 1.5f, _interactSize);
+                    interactArea = new FloatRect(Position.X + InteractPoint.X - _interactSize* 1.5f / 2, 
+                        Position.Y + InteractPoint.Y - _interactSize, 
+                        _interactSize * 1.5f, 
+                        _interactSize);
                     break;
                 case Direction.S:
-                    interactArea = new FloatRect(collisionBounds.Center.X - _interactSize * 1.5f / 2, collisionBounds.Center.Y, _interactSize * 1.5f, _interactSize);
+                    interactArea = new FloatRect(Position.X + InteractPoint.X - _interactSize * 1.5f / 2, 
+                        Position.Y + InteractPoint.Y, 
+                        _interactSize * 1.5f, 
+                        _interactSize);
                     break;
                 case Direction.W:
-                    interactArea = new FloatRect(collisionBounds.Center.X - _interactSize, collisionBounds.Center.Y - _interactSize * 1.5f / 2, _interactSize, _interactSize * 1.5f);
+                    interactArea = new FloatRect(Position.X + InteractPoint.X - _interactSize, 
+                        Position.Y + InteractPoint.Y - _interactSize * 1.5f / 2, 
+                        _interactSize, 
+                        _interactSize * 1.5f);
                     break;
                 case Direction.E:
-                    interactArea = new FloatRect(collisionBounds.Center.X, collisionBounds.Center.Y - _interactSize * 1.5f / 2, _interactSize, _interactSize * 1.5f);
+                    interactArea = new FloatRect(Position.X + InteractPoint.X, 
+                        Position.Y + InteractPoint.Y - _interactSize * 1.5f / 2, 
+                        _interactSize, 
+                        _interactSize * 1.5f);
                     break;
                 default:
                     interactArea = new FloatRect();
