@@ -548,6 +548,7 @@ namespace SpaceExplorers
             RoomEntity TreesBack = new RoomEntity("TreesBack", new Vector(2000, 397), "TreesBack.png");
             TreesBack.SetCollisionBounds(boundsTreesBack);
             TreesBack.Immobile = true;
+            TreesBack.SetZLevel(2);
             Entities.Add(TreesBack.GetID(), TreesBack);
 
             Polygon boundsTreesFore = new Polygon();
@@ -557,7 +558,7 @@ namespace SpaceExplorers
             boundsTreesFore.Points.Add(new Vector(0, 600));
             boundsTreesFore.BuildEdges();
             TextureLibrary.Textures.Add("TreesFore.png", new Texture(new Image("Images\\Objects\\TreesFore.png")));
-            RoomEntity TreesFore = new RoomEntity("TreesFore", new Vector(2000, 397), "TreesFore.png");
+            RoomEntity TreesFore = new RoomEntity("TreesFore", new Vector(2000, 600), "TreesFore.png");
             TreesFore.SetCollisionBounds(boundsTreesFore);
             TreesFore.Immobile = true;
             Entities.Add(TreesFore.GetID(), TreesFore);

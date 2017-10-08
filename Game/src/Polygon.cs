@@ -24,11 +24,14 @@ namespace SpaceExplorers {
             Concave
         }
 
-        public enum PolygonDirection
+        public enum PointPosition
         {
-            Unknown,
-            Clockwise,
-            Count_Clockwise
+            Inside,
+            Above,
+            Below,
+            Left,
+            Right,
+            None
         }
 
         public List<Vector> Points = new List<Vector>();
@@ -62,7 +65,7 @@ namespace SpaceExplorers {
 					totalY += Points[i].Y;
 				}
 
-				return new Vector(totalX / (float)Points.Count, totalY / (float)Points.Count);
+				return new Vector(totalX / Points.Count, totalY / Points.Count);
 			}
 		}
 
@@ -226,6 +229,52 @@ namespace SpaceExplorers {
                     }
                 }
             }
+        }
+
+        /// <summary>
+        /// Returns Above if the point is directly above the polygon or Below if it is directly below, 
+        /// Inside if it is inside the polygon or None if it is to the left or right of the polygon.
+        /// </summary>
+        /// <param name="point">The point to compare to the polygon</param>
+        /// <returns>Above, Below, Inside, or None</returns>
+        public PointPosition PointYRelation(Vector point)
+        {
+            PointPosition ret = PointPosition.None;
+            for (int i = 0; i < Points.Count; i++)
+            {
+                LineSegment line = new LineSegment(Points[i], Points[Utility.ValueWrap(i + 1, Points.Count)]);
+                if (line.PointWithinXBounds(point))
+                { //Point is above, below, or in given line
+                    int relation = line.GetPointLocation(point);
+                    if (relation == -1)
+                    {
+                        if (ret == PointPosition.Below)
+                        {
+                            return PointPosition.Inside;
+                        }
+                        else
+                        {
+                            ret = PointPosition.Above;
+                        }
+                    }
+                    else if (relation == 1)
+                    {
+                        if (ret == PointPosition.Above)
+                        {
+                            return PointPosition.Inside;
+                        }
+                        else
+                        {
+                            ret = PointPosition.Below;
+                        }
+                    }
+                    else
+                    {
+                        return PointPosition.Inside;
+                    }
+                }
+            }
+            return ret;
         }
 
         public List<Polygon> MakeConvex()
@@ -442,7 +491,7 @@ namespace SpaceExplorers {
         ref: www.swin.edu.au/astronomy/pbourke/
             geometry/polyarea/
 
-        As polygon in different direction, the result coulb be
+        As polygon in different direction, the result could be
         in different sign:
         If dblArea>0 : polygon in clock wise to the user 
         If dblArea<0: polygon in count clock wise to the user 		
@@ -484,9 +533,9 @@ namespace SpaceExplorers {
 
             bool ret = false;
 
-            CLineSegment line0 = new CLineSegment(trianglePoints[0], trianglePoints[1]);
-            CLineSegment line1 = new CLineSegment(trianglePoints[1], trianglePoints[2]);
-            CLineSegment line2 = new CLineSegment(trianglePoints[2], trianglePoints[0]);
+            LineSegment line0 = new LineSegment(trianglePoints[0], trianglePoints[1]);
+            LineSegment line1 = new LineSegment(trianglePoints[1], trianglePoints[2]);
+            LineSegment line2 = new LineSegment(trianglePoints[2], trianglePoints[0]);
 
             if (line0.InLine(point) || line1.InLine(point)
                 || line2.InLine(point))

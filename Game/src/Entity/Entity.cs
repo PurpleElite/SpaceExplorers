@@ -195,6 +195,11 @@ namespace SpaceExplorers
             NewMaskRect = newMaskRect;
         }
 
+        public override string ToString()
+        {
+            return ID + "_" + CopyNum;
+        }
+
         // Helper Methods
         public FloatRect RectInterpolate(FloatRect current, FloatRect target, int steps)
         {

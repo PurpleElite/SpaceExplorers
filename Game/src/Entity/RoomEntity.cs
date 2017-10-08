@@ -9,7 +9,8 @@ namespace SpaceExplorers
 {
     public class RoomEntity : Entity
     {
-        protected List<Polygon> collisionBounds;
+        protected List<Polygon> _collisionBounds;
+        public Polygon ZBound;
         public bool CollisionDetection = false;
         public bool Immobile = false;
 
@@ -32,11 +33,15 @@ namespace SpaceExplorers
             copy.Velocity = new Vector(Velocity.X, Velocity.Y);
             if (CollisionDetection)
             {
-                copy.collisionBounds = new List<Polygon>();
-                foreach(var bound in collisionBounds)
+                copy._collisionBounds = new List<Polygon>();
+                foreach(var bound in _collisionBounds)
                 {
-                    copy.collisionBounds.Add(bound.Copy());
+                    copy._collisionBounds.Add(bound.Copy());
                 }
+            }
+            if (ZBound != null)
+            {
+                copy.ZBound = ZBound.Copy();
             }
             return copy;
         }
@@ -52,7 +57,7 @@ namespace SpaceExplorers
             List<Polygon> candidates = obj.GetCollisionBounds();
             foreach (var candidate in candidates)
             {
-                foreach (var bound in collisionBounds)
+                foreach (var bound in _collisionBounds)
                 {
                     Polygon.PolygonCollisionResult result = bound.PolygonCollision(candidate, Velocity);
                     if (!Immobile)
@@ -63,6 +68,50 @@ namespace SpaceExplorers
                 }
             }
             return willIntersect;
+        }
+
+        public virtual Polygon.PointPosition ZRelation(Vector point)
+        {
+            if (ZBound != null)
+            {
+                return ZBound.PointYRelation(point);
+            }
+            else
+            {
+                return Polygon.PointPosition.None;
+                /**Polygon.PointPosition ret = Polygon.PointPosition.None;
+                foreach (var bound in _collisionBounds)
+                {
+                    Polygon.PointPosition relation = bound.PointYRelation(point);
+                    if (relation == Polygon.PointPosition.Inside)
+                    {
+                        return relation;
+                    }
+                    else if (relation == Polygon.PointPosition.Above)
+                    {
+                        if (ret == Polygon.PointPosition.Below)
+                        {
+                            return Polygon.PointPosition.Inside;
+                        }
+                        else
+                        {
+                            ret = Polygon.PointPosition.Above;
+                        }
+                    }
+                    else if (relation == Polygon.PointPosition.Below)
+                    {
+                        if (ret == Polygon.PointPosition.Above)
+                        {
+                            return Polygon.PointPosition.Inside;
+                        }
+                        else
+                        {
+                            ret = Polygon.PointPosition.Below;
+                        }
+                    }
+                }
+                return ret;**/
+            }
         }
 
         public virtual void Interaction(Actor user)
@@ -88,7 +137,7 @@ namespace SpaceExplorers
 
         public List<Polygon> GetCollisionBounds()
         {
-            return collisionBounds;
+            return _collisionBounds;
         }
 
         public Vector GetInteractPoint()
@@ -103,8 +152,12 @@ namespace SpaceExplorers
             Vector difference = position - Position;
             if (CollisionDetection)
             {
-                foreach(var bound in collisionBounds)
+                foreach(var bound in _collisionBounds)
                     bound.Offset(difference);
+            }
+            if (ZBound != null)
+            {
+                ZBound.Offset(difference);
             }
             base.SetPosition(position);
         }
@@ -135,9 +188,11 @@ namespace SpaceExplorers
 
         public void SetCollisionBounds(Polygon bounds)
         {
+            if (ZBound == null)
+                ZBound = bounds.Copy();
             CollisionDetection = true;
-            collisionBounds = bounds.Copy().MakeConvex();
-            foreach(var bound in collisionBounds)
+            _collisionBounds = bounds.Copy().MakeConvex();
+            foreach(var bound in _collisionBounds)
                 bound.Offset(Position);
         }
     }

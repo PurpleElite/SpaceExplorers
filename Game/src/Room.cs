@@ -67,6 +67,30 @@ namespace SpaceExplorers
                 }
                 ent.Step();
             }
+            foreach (var actor in EntityList.OfType<Actor>())
+            {
+                int newZ = 0;
+                foreach (var ent in EntityList)
+                {
+                    if (ent != actor)
+                    {
+                        if (Utility.RectangleIntersect(actor.Position.X, actor.Position.Y, actor.Size.X, actor.Size.Y,
+                            ent.Position.X, ent.Position.Y, ent.Size.X, ent.Size.Y))
+                        {
+                            var relation = ent.ZRelation(actor.InteractPoint+actor.Position);
+                            if (relation == Polygon.PointPosition.Below && ent.ZLevel > newZ)
+                            {
+                                newZ = ent.ZLevel + 1;
+                            }
+                            else if (relation == Polygon.PointPosition.Above && ent.ZLevel < newZ)
+                            {
+                                newZ = ent.ZLevel - 1;
+                            }
+                        }
+                    }
+                }
+                actor.ZLevel = newZ;
+            }
             EntityList = EntityList.OrderBy(MapEntity => MapEntity.ZLevel).ToList();
             camera.Step();
         }
