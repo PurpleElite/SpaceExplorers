@@ -73,7 +73,7 @@ namespace SpaceExplorers
         // --Private Methods--
         private void UpdateAnimation()
         {
-            if (Velocity.Magnitude > 0)
+            if (Velocity.Magnitude > 0.1)
             {
                 // Moving
                 if (AnimationType.IsMovement(_animation))

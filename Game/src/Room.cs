@@ -69,7 +69,7 @@ namespace SpaceExplorers
             }
             foreach (var actor in EntityList.OfType<Actor>())
             {
-                int newZ = 0;
+                int newZ = actor.ZLevel;
                 foreach (var ent in EntityList)
                 {
                     if (ent != actor)

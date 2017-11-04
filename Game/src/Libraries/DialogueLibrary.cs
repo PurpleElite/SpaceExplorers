@@ -62,6 +62,9 @@ namespace SpaceExplorers
             line3.AddChoice(line19);
             var line20 = new DialogueLine("The fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["AHavisham"], "");
             line19.AddChoice(line20);
+
+            var EGottfried1 = new DialogueLine("Gottfried.", (Actor)EntityLibrary.Entities["AHavisham"]);
+            Dialogues.Add(new DialogueKey("AHavisham", "EGottfried"), EGottfried1);
         }
     }
 }
