@@ -85,7 +85,16 @@ namespace SpaceExplorers
             {
                 if (_currentLine.Speaker != null)
                 {
-                    SetPortrait(_currentLine.Speaker.PortraitKey);
+                    string portrait;
+                    if (_currentLine.Speaker.Portraits.ContainsKey(_currentLine.Portrait))
+                    {
+                        portrait = _currentLine.Speaker.Portraits[_currentLine.Portrait];
+                    }
+                    else
+                    {
+                        portrait = _currentLine.Speaker.Portraits[Actor.PortraitType.normal];
+                    }
+                    SetPortrait(portrait);
                 }
                 _dialogueBox.Display(_currentLine);
             }

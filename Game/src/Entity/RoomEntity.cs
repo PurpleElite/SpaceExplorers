@@ -116,7 +116,7 @@ namespace SpaceExplorers
 
         public virtual void Interaction(Actor user)
         {
-            InteractAction.Invoke(user, this);
+            InteractAction.Invoke();
         }
 
         // --Getter Methods--

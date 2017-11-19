@@ -10,6 +10,7 @@ namespace SpaceExplorers
 {
     public class Actor : RoomEntity, IControllable
     {
+        public enum PortraitType : int { normal, glare, angry, smirk, somber, curious, concerned, laughing, suspicious, conflicted, misc1 };
         enum Direction : int { E = 0, SE = 45, S = 90, SW = 135, W = 180, NW = 225,  N = 270, NE = 315 };
 
         public string Name;
@@ -24,14 +25,15 @@ namespace SpaceExplorers
         private float _speed;
         private float _interactSize = 50;
         private int _runFrame = 0;
-        public string PortraitKey;
+        public Dictionary<PortraitType, string> Portraits;
 
         public Actor(string ID, string name, Vector size, string textureKey, string portraitKey, float speed) : base(ID, size, textureKey)
         {
             Name = name;
             Size = size;
             Velocity = new Vector(0, 0);
-            PortraitKey = portraitKey;
+            Portraits = new Dictionary<PortraitType, string>();
+            Portraits.Add(PortraitType.normal, portraitKey);
             _speed = speed;
         }
 
@@ -191,7 +193,7 @@ namespace SpaceExplorers
             Velocity *= _speed;
         }
 
-        internal FloatRect getInteractArea()
+        internal FloatRect GetInteractArea()
         {
             FloatRect interactArea;
             switch (_keyRecent)
@@ -225,6 +227,14 @@ namespace SpaceExplorers
                     break;
             }
             return interactArea;
+        }
+
+        public void SetAnimation(AnimType animType)
+        {
+            if(Animations.ContainsKey(animType))
+            {
+                _animation = Animations[animType];
+            }
         }
 
         //Key Presses

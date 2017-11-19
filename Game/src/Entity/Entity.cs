@@ -29,7 +29,7 @@ namespace SpaceExplorers
         public string ID;
         public bool Interactable = false;
         public Vector InteractPoint;
-        public Action<Entity, Entity> InteractAction;
+        public Action InteractAction;
         public int ZLevel = 0;
         public bool LockZLevel = false;
         public int CopyNum = 0;
@@ -123,7 +123,7 @@ namespace SpaceExplorers
             return new Renderable(null);
         }
 
-        public void InitializeInteraction(Action<Entity, Entity> action)
+        public void InitializeInteraction(Action action)
         {
             InteractAction = action;
             Interactable = true;

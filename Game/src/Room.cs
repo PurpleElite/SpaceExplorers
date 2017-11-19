@@ -100,7 +100,7 @@ namespace SpaceExplorers
         {
             RoomEntity target = null;
             float minDistance = -1;
-            FloatRect interactArea = user.getInteractArea();
+            FloatRect interactArea = user.GetInteractArea();
             foreach (var ent in EntityList.Where(item => item.Interactable))
             {
                 Vector interactPoint = ent.GetInteractPoint();
