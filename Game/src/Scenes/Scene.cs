@@ -19,6 +19,13 @@ namespace SpaceExplorers
             index = -1;
         }
 
+        public void Run()
+        {
+            Scene copy = new Scene(ID);
+            copy.Events = new List<ISceneEvent>(Events);
+            copy.Continue();
+        }
+
         public void Continue()
         {
             index++;

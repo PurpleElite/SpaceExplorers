@@ -1,4 +1,4 @@
-﻿using System;
+﻿/*using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,4 +68,4 @@ namespace SpaceExplorers
             var EGottfried2 = new DialogueLine("GID lapdog.  What do you want?", (Actor)EntityLibrary.Entities["EGottfried"], "", Actor.PortraitType.glare);
         }
     }
-}
+}*/

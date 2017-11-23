@@ -119,7 +119,10 @@
   <ItemGroup>
     <Compile Include="src\Interfaces\ISceneEvent.cs" />
     <Compile Include="src\Libraries\SceneLibrary.cs" />
+    <Compile Include="src\Scenes\EventAction.cs" />
+    <Compile Include="src\Scenes\EventDialogueChoice.cs" />
     <Compile Include="src\Scenes\EventDialogue.cs" />
+    <Compile Include="src\Scenes\EventPlayAnimation.cs" />
     <Compile Include="src\Scenes\EventRemoveDialogue.cs" />
     <Compile Include="src\Scenes\Scene.cs" />
     <Compile Include="src\AnimationTypes.cs" />

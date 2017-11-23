@@ -19,15 +19,15 @@ namespace SpaceExplorers.Scenes
         {
             foreach (Entity HudEnt in Program.ActiveHud.EntityList)
             {
-                if (HudEnt.ID.Substring(0, "DialoguePortraitBack".Length - 1) == "DialoguePortraitBack")
+                if (HudEnt.ID == "DialoguePortraitBack")
                 {
                     _dialoguePortraitBack = (HudEntity)HudEnt;
                 }
-                if (HudEnt.ID.Substring(0, "DialoguePortrait".Length - 1) == "DialoguePortrait")
+                if (HudEnt.ID == "DialoguePortrait")
                 {
                     _dialoguePortrait = (HudEntity)HudEnt;
                 }
-                if (HudEnt.ID.Substring(0, "DialogueBox".Length - 1) == "DialogueBox")
+                if (HudEnt.ID == "DialogueBox")
                 {
                     _dialogueBox = (MenuDialogue)HudEnt;
                 }
@@ -39,6 +39,7 @@ namespace SpaceExplorers.Scenes
             _dialogueBox.CreateTimer(delegate { _dialogueBox.TransformMove(new Vector(262, 270), _popupTime); }, _slideTime);
             _dialogueBox.CreateTimer(_dialogueBox.Destroy, _slideTime + _popupTime);
             _dialogueBox.CreateTimer(Program.Controller.Return_Control, _slideTime + _popupTime);
+            _dialogueBox.CreateTimer(parent.Continue, _slideTime + _popupTime);
             _dialoguePortraitBack.TransformMove(new Vector(214, 200), _slideTime);
             _dialoguePortraitBack.CreateTimer(delegate { _dialoguePortraitBack.TransformMove(new Vector(214, 270), _popupTime); }, _slideTime);
             _dialoguePortraitBack.CreateTimer(_dialoguePortraitBack.Destroy, _slideTime + _popupTime);

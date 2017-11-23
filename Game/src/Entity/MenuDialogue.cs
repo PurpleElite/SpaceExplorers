@@ -8,6 +8,7 @@ namespace SpaceExplorers
 {
     class MenuDialogue : HudEntity, IControllable
     {
+        private Action _callback;
         private TextBox _textDisplay;
         private TextBox _textName;
         private string _displayText;
@@ -60,15 +61,15 @@ namespace SpaceExplorers
                 if (_displayIncrement >= _displayText.Length)
                 {
                     _displayDone = true;
-                    if (_blockIncrement == _textBlocks.Count - 1)
+                    /*if (_blockIncrement == _textBlocks.Count - 1)
                     {
                         Program.DialogueEngine.DisplayFinished();
-                    }
+                    }*/
                 }
                 else
                 {
                     char currentChar = _displayText[_displayIncrement];
-                    if (_skipChars.Any(item => item == currentChar))
+                    if (_skipChars.Contains(currentChar))
                     {
                         _displayIncrement++;
                         Step();
@@ -108,8 +109,9 @@ namespace SpaceExplorers
         /// Display the given line of dialogue.
         /// </summary>
         /// <param name="line"></param>
-        internal void Display(DialogueLine line)
+        internal void Display(DialogueLine line, Action callback)
         {
+            _callback = callback;
             //Set all variables to default values
             _blockIncrement = 0;
             _displayDone = false;
@@ -179,7 +181,7 @@ namespace SpaceExplorers
                 //check to see if we've finished displaying all blocks
                 if (_blockIncrement >= _textBlocks.Count)
                 {
-                    Program.DialogueEngine.Forward();
+                    _callback.Invoke();
                 }
                 else
                 {

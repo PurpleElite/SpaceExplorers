@@ -13,7 +13,7 @@ namespace SpaceExplorers.Scenes
         HudEntity _dialoguePortrait;
         DialogueLine _line;
         Scene _parent;
-        bool _done;
+        bool _pause;
 
         private int _popupTime = 8;
         private int _slideTime = 15;
@@ -21,30 +21,40 @@ namespace SpaceExplorers.Scenes
         public EventDialogue(DialogueLine line)
         {
             _line = line;
+            _pause = true;
+        }
+
+        public EventDialogue(DialogueLine line, bool pause)
+        {
+            _line = line;
+            _pause = pause;
         }
 
         /// <summary>
         /// Display a line of dialogue with the given parameters.
         /// </summary>
+        /// <param name="parent"></param>
+        /// <returns></returns>
         public SceneEventReturn Execute(Scene parent)
         {
             _parent = parent;
-            // Set it so that the player cant push the dialogue forward until the text is done displaying
-            _done = false;
             bool newBox = true;
+            _dialogueBox = null;
+            _dialoguePortraitBack = null;
+            _dialoguePortrait = null;
             // Look for existing dialogue box elements
             foreach (Entity HudEnt in Program.ActiveHud.EntityList)
             {
-                if (HudEnt.ID.Substring(0,"DialoguePortraitBack".Length - 1) == "DialoguePortraitBack")
+                if (HudEnt.ID == "DialoguePortraitBack")
                 {
                     _dialoguePortraitBack = (HudEntity)HudEnt;
                     newBox = false;
                 }
-                if (HudEnt.ID.Substring(0, "DialoguePortrait".Length - 1) == "DialoguePortrait")
+                if (HudEnt.ID == "DialoguePortrait")
                 {
                     _dialoguePortrait = (HudEntity)HudEnt;
                 }
-                if (HudEnt.ID.Substring(0, "DialogueBox".Length - 1) == "DialogueBox")
+                if (HudEnt.ID == "DialogueBox")
                 {
                     _dialogueBox = (MenuDialogue)HudEnt;
                 }
@@ -77,10 +87,10 @@ namespace SpaceExplorers.Scenes
                 _dialogueBox.SetZLevel(9);
                 Program.ActiveHud.AddEntity(_dialogueBox);
             }
-            // Send user input to the dialogue box
-            Program.Controller.Set_Control(_dialogueBox);
             if (newBox)
             {
+                // Send user input to the dialogue box
+                Program.Controller.Set_Control(_dialogueBox);
                 // Set a timer for the dialogue box's entry into the screen
                 _dialoguePortraitBack.CreateTimer(Display, _slideTime + _popupTime);
             }
@@ -89,33 +99,35 @@ namespace SpaceExplorers.Scenes
                 Display();
             }
 
-            SceneEventReturn ret = new SceneEventReturn(true);
+            SceneEventReturn ret = new SceneEventReturn(_pause);
             return ret;
         }
 
         public void Display()
         {
-            if (_done)
+            if (_line.Speaker != null)
             {
-                _parent.Continue();
+                string portrait;
+                if (_line.Speaker.Portraits.ContainsKey(_line.Portrait))
+                {
+                    portrait = _line.Speaker.Portraits[_line.Portrait];
+                }
+                else
+                {
+                    portrait = _line.Speaker.Portraits[Actor.PortraitType.normal];
+                }
+                SetPortrait(portrait);
+            }
+            Action callback;
+            if (_pause)
+            {
+                callback = () => _parent.Continue();
             }
             else
             {
-                if (_line.Speaker != null)
-                {
-                    string portrait;
-                    if (_line.Speaker.Portraits.ContainsKey(_line.Portrait))
-                    {
-                        portrait = _line.Speaker.Portraits[_line.Portrait];
-                    }
-                    else
-                    {
-                        portrait = _line.Speaker.Portraits[Actor.PortraitType.normal];
-                    }
-                    SetPortrait(portrait);
-                }
-                _dialogueBox.Display(_line);
+                callback = () => { };
             }
+            _dialogueBox.Display(_line, callback);
         }
 
         private void SetPortrait(string textureKey)

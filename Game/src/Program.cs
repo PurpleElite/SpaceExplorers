@@ -19,7 +19,7 @@ namespace SpaceExplorers
         static Vector2u windowDim = new Vector2u(960, 540);
         public static Room ActiveRoom;
         public static Hud ActiveHud;
-        public static DialogueEngine DialogueEngine;
+        //public static DialogueEngine DialogueEngine;
         private static Queue<Sound> soundQueue = new Queue<Sound>();
 
         static void Main(string[] args)
@@ -50,8 +50,8 @@ namespace SpaceExplorers
             SoundLibrary.Initialize();
 
             //Create Dialogue Engine
-            DialogueEngine = new DialogueEngine();
-            DialogueLibrary.Initialize();
+            //DialogueEngine = new DialogueEngine();
+            //DialogueLibrary.Initialize();
 
             //Initialize Scenes
             SceneLibrary.Initialize();
@@ -125,7 +125,7 @@ namespace SpaceExplorers
             Controller.Set_Control(AHavisham);
             defaultCamera.Set_Focus(AHavisham);
             Actor JBreech = (Actor)EntityLibrary.Create("JBreech", new Vector(257, 609));
-            Action dialogue = () => SceneLibrary.Scenes["AHavishamJBreechDialogue"].Continue();
+            Action dialogue = () => SceneLibrary.Scenes["AHavishamJBreechDialogue"].Run();
             JBreech.InitializeInteraction(dialogue);
             JBreech.InteractPoint = new Vector(26, 47);
             ActiveRoom.EntityList.Add(JBreech);
