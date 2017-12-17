@@ -47,5 +47,10 @@ namespace SpaceExplorers.Scenes
             SceneEventReturn ret = new SceneEventReturn(true);
             return ret;
         }
+
+        public ISceneEvent Copy()
+        {
+            return this;
+        }
     }
 }

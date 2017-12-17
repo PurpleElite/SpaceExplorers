@@ -13,5 +13,7 @@
     public interface ISceneEvent
     {
         SceneEventReturn Execute(Scene parent);
+
+        ISceneEvent Copy();
     }
 }

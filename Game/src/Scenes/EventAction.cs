@@ -21,5 +21,10 @@ namespace SpaceExplorers.Scenes
             SceneEventReturn ret = new SceneEventReturn(false);
             return ret;
         }
+
+        public ISceneEvent Copy()
+        {
+            return this;
+        }
     }
 }

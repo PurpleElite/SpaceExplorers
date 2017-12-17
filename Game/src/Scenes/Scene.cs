@@ -38,5 +38,16 @@ namespace SpaceExplorers
                 }
             }
         }
+
+        public virtual Scene Copy()
+        {
+            Scene copy = (Scene)MemberwiseClone();
+            copy.Events = new List<ISceneEvent>();
+            foreach (var e in Events)
+            {
+                copy.Events.Add(e.Copy());
+            }
+            return copy;
+        }
     }
 }

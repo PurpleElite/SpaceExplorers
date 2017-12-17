@@ -48,9 +48,10 @@ namespace SpaceExplorers.Scenes
             choiceList.SetZLevel(zLevel);
             foreach (var choice in _choices)
             {
-                //The Continues stack up over time, so they need to be temporary. Consider making a deep copy before adding in the continue event?
-                choice.Scene.Events.Add(new EventAction(() => parent.Continue()));
-                Action choiceAction = () => choice.Scene.Run();
+                //Make a deep copy so that the added continue events don't pile up indefinately.
+                Scene choiceScene = choice.Scene.Copy();
+                choiceScene.Events.Add(new EventAction(() => parent.Continue()));
+                Action choiceAction = () => choiceScene.Run();
                 choiceList.AddOption(new MenuList.ListOption(choice.Text, choiceAction));
             }
             Program.ActiveHud.AddEntity(choiceList);
@@ -58,6 +59,11 @@ namespace SpaceExplorers.Scenes
 
             SceneEventReturn ret = new SceneEventReturn(true);
             return ret;
+        }
+
+        public ISceneEvent Copy()
+        {
+            return this;
         }
     }
 }

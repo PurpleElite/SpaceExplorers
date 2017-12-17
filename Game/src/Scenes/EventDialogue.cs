@@ -135,5 +135,10 @@ namespace SpaceExplorers.Scenes
             _dialoguePortrait.SetPosition(_dialoguePortraitBack.Position + new Vector(4, 6));
             _dialoguePortrait.TextureKey = textureKey;
         }
+
+        public ISceneEvent Copy()
+        {
+            return this;
+        }
     }
 }
