@@ -9,6 +9,7 @@ namespace SpaceExplorers
     class MenuDialogue : HudEntity, IControllable
     {
         private Action _callback;
+        private bool _waitForInput;
         private TextBox _textDisplay;
         private TextBox _textName;
         private string _displayText;
@@ -61,10 +62,11 @@ namespace SpaceExplorers
                 if (_displayIncrement >= _displayText.Length)
                 {
                     _displayDone = true;
-                    /*if (_blockIncrement == _textBlocks.Count - 1)
+                    _blockIncrement++;
+                    if (_blockIncrement >= _textBlocks.Count && !_waitForInput)
                     {
-                        Program.DialogueEngine.DisplayFinished();
-                    }*/
+                        _callback.Invoke();
+                    }
                 }
                 else
                 {
@@ -109,9 +111,10 @@ namespace SpaceExplorers
         /// Display the given line of dialogue.
         /// </summary>
         /// <param name="line"></param>
-        internal void Display(DialogueLine line, Action callback)
+        internal void Display(DialogueLine line, Action callback, bool waitForInput)
         {
             _callback = callback;
+            _waitForInput = waitForInput;
             //Set all variables to default values
             _blockIncrement = 0;
             _displayDone = false;
@@ -177,7 +180,6 @@ namespace SpaceExplorers
             //check to see if current block is done, if not speed up text display
             if (_displayDone && _stepCountMask <= 0 && _stepCountMove <= 0)
             {
-                _blockIncrement++;
                 //check to see if we've finished displaying all blocks
                 if (_blockIncrement >= _textBlocks.Count)
                 {

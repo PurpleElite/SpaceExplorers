@@ -13,7 +13,7 @@ namespace SpaceExplorers.Scenes
         HudEntity _dialoguePortrait;
         DialogueLine _line;
         Scene _parent;
-        bool _pause;
+        bool _pauseAfterDisplay;
 
         private int _popupTime = 8;
         private int _slideTime = 15;
@@ -21,13 +21,13 @@ namespace SpaceExplorers.Scenes
         public EventDialogue(DialogueLine line)
         {
             _line = line;
-            _pause = true;
+            _pauseAfterDisplay = true;
         }
 
-        public EventDialogue(DialogueLine line, bool pause)
+        public EventDialogue(DialogueLine line, bool pauseAfterDisplay)
         {
             _line = line;
-            _pause = pause;
+            _pauseAfterDisplay = pauseAfterDisplay;
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace SpaceExplorers.Scenes
                 Display();
             }
 
-            SceneEventReturn ret = new SceneEventReturn(_pause);
+            SceneEventReturn ret = new SceneEventReturn(true);
             return ret;
         }
 
@@ -118,16 +118,8 @@ namespace SpaceExplorers.Scenes
                 }
                 SetPortrait(portrait);
             }
-            Action callback;
-            if (_pause)
-            {
-                callback = () => _parent.Continue();
-            }
-            else
-            {
-                callback = () => { };
-            }
-            _dialogueBox.Display(_line, callback);
+            Action callback = () => _parent.Continue();
+            _dialogueBox.Display(_line, callback, _pauseAfterDisplay);
         }
 
         private void SetPortrait(string textureKey)
