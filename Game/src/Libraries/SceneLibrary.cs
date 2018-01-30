@@ -15,9 +15,9 @@ namespace SpaceExplorers
             Scene aHavishamJBreech = new Scene("AHavishamJBreechDialogue");
             var line1 = new DialogueLine("Hey debug stand in guy how you doin?  You're looking a little animated there.", (Actor)EntityLibrary.Entities["AHavisham"]);
             aHavishamJBreech.Events.Add(new Scenes.EventDialogue(line1));
-            var line2 = new DialogueLine("What the fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["JBreech"]);
+            var line2 = new DialogueLine("You can hold down E to speed up dialogue.", (Actor)EntityLibrary.Entities["JBreech"]);
             aHavishamJBreech.Events.Add(new Scenes.EventDialogue(line2));
-            var line3 = new DialogueLine("I’ll have you know I graduated top of my class in the Navy Seals", null);
+            var line3 = new DialogueLine("Here you can choose a dialogue options from the box using W and S, then use E to select.", null);
             aHavishamJBreech.Events.Add(new Scenes.EventDialogue(line3, false));
 
             Scene branch1 = new Scene("AHavishamJBreechDialogueBranch1");
@@ -25,30 +25,24 @@ namespace SpaceExplorers
             Scenes.DialogueChoice choice1 = new Scenes.DialogueChoice("Stop.", branch1);
 
             Scene branch2 = new Scene("AHavishamJBreechDialogueBranch2");
-            branch2.Events.Add(new Scenes.EventDialogue(new DialogueLine("What.", (Actor)EntityLibrary.Entities["AHavisham"])));
-            branch2.Events.Add(new Scenes.EventDialogue(new DialogueLine("The fuck did you just fucking say about me, you little bitch?", (Actor)EntityLibrary.Entities["AHavisham"])));
-            Scenes.DialogueChoice choice2 = new Scenes.DialogueChoice("What.", branch2);
+            branch2.Events.Add(new Scenes.EventDialogue(new DialogueLine("This is a test option.", (Actor)EntityLibrary.Entities["AHavisham"])));
+            branch2.Events.Add(new Scenes.EventDialogue(new DialogueLine("It tests multiple lines of short dialogue.", (Actor)EntityLibrary.Entities["AHavisham"])));
+            Scenes.DialogueChoice choice2 = new Scenes.DialogueChoice("TempChoice", branch2);
 
             Scene branch3 = new Scene("AHavishamJBreechDialogueBranch3");
             Scenes.DialogueChoice choice3 = new Scenes.DialogueChoice("...", branch3);
 
             aHavishamJBreech.Events.Add(new Scenes.EventDialogueChoice(new List<Scenes.DialogueChoice>(){choice1, choice2, choice3}));
 
-            var line4 = new DialogueLine("and I’ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills.", null);
+            var line4 = new DialogueLine("I am now going to test a long block of text to make sure it's properly broken into multiple lines", null);
             branch3.Events.Add(new Scenes.EventDialogue(line4, false));
 
             Scene branch5 = new Scene("AHavishamJBreechDialogueBranch5");
-            var line5 = new DialogueLine("I am trained in gorilla warfare and I’m the top sniper in the entire US armed forces. You are nothing " +
-                "to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this " +
-                "Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. " +
-                "As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better " +
-                "prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You’re fucking dead, " +
-                "kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that’s just with my bare hands. Not only " +
-                "am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine " +
-                "Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only " +
-                "you could have known what unholy retribution your little “clever” comment was about to bring down upon you, maybe you would " +
-                "have held your fucking tongue. But you couldn’t, you didn’t, and now you’re paying the price, you goddamn idiot. I will shit " +
-                "fury all over you and you will drown in it. You’re fucking dead, kiddo.", null);
+            var line5 = new DialogueLine("one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen" +
+                "seventeen eighteen nineteen twenty twentyone twentytwo twentythree twentyfour twentyfive twentysix twentyseven twentyeight" +
+                "twentynine thirty thirtyone thirtytwo thirtythree thirtyfour thirtyfive thirtysix thirtyseven thirtyeight thirtynine 40 41" +
+                "42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80" +
+                "81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 One Hundred", null);
             branch5.Events.Add(new Scenes.EventDialogue(line5, false));
             Scenes.DialogueChoice choice5 = new Scenes.DialogueChoice("...", branch5);
 

@@ -119,7 +119,7 @@ namespace SpaceExplorers
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("MedMod", new Vector(1476, 302)));
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("NuclearMod", new Vector(303, 315)));
             ActiveRoom.EntityList.Add((RoomEntity)EntityLibrary.Create("NuclearBeaconWire", new Vector(448, 494)));
-            Actor AHavisham = (Actor)EntityLibrary.Create("AHavisham", new Vector(984, 612));
+            Actor AHavisham = (Actor)EntityLibrary.Create("AHavisham", new Vector(312, 612));
             AHavisham.InteractPoint = new Vector(25, 47);
             ActiveRoom.EntityList.Add(AHavisham);
             Controller.Set_Control(AHavisham);
