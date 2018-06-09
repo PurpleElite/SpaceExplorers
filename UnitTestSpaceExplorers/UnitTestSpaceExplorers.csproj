@@ -57,6 +57,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AnimationTest.cs" />
     <Compile Include="PolygonTest.cs" />
     <Compile Include="VectorTest.cs" />
     <Compile Include="EntityTest.cs" />

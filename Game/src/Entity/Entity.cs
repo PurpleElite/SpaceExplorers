@@ -26,6 +26,7 @@ namespace SpaceExplorers
         public Vector Velocity = new Vector(0, 0);
         public Vector Position;
         public Vector Size;
+
         public string ID;
         public bool Interactable = false;
         public Vector InteractPoint;
@@ -35,11 +36,8 @@ namespace SpaceExplorers
         public int CopyNum = 0;
         public string TextureKey { get; set; }
 
-        protected Animation _animation;
-        public Animation CurrAnimation
-        {
-            get { return _animation; }
-        }
+        public Animation CurrAnimation { get; private set; }
+        public AnimType CurrAnimType { get; private set; }
         public Dictionary<AnimType, Animation> Animations;
 
         private FloatRect _maskRect;
@@ -89,9 +87,9 @@ namespace SpaceExplorers
             Entity copy = (Entity)MemberwiseClone();
             copy.Position = new Vector(Position.X, Position.Y);
             copy.Size = new Vector(Size.X, Size.Y);
-            if (_animation != null)
+            if (CurrAnimation != null)
             {
-                copy._animation = _animation.Copy();
+                copy.CurrAnimation = CurrAnimation.Copy();
             }
             if (Interactable)
             {
@@ -153,14 +151,11 @@ namespace SpaceExplorers
             }
 
             SetPosition(Position + Velocity);
-            if (_animation == null)
-            {
-                if (Animations.ContainsKey(AnimType.Idle)) _animation = Animations[AnimType.Idle];
-            }
 
-            if (_animation != null)
+            if (CurrAnimation != null)
             {
-                TextureKey = _animation.Step();
+                string newTexture = CurrAnimation.Step();
+                if (newTexture != null) TextureKey = newTexture;
             }
 
             for (int i = _timers.Count - 1; i >= 0; i--)
@@ -177,10 +172,31 @@ namespace SpaceExplorers
             }
         }
 
+
         public virtual void CreateTimer(Action action, int numSteps)
         {
             TimerAction newTimer = new TimerAction(action, numSteps);
             _timers.Add(newTimer);
+        }
+
+        internal void PlayAnimation(AnimType anim)
+        {
+            if (Animations.ContainsKey(anim))
+            {
+                CurrAnimation = Animations[anim].Copy();
+                CurrAnimType = anim;
+            }
+        }
+
+
+        internal void PlayAnimation(AnimType anim, Action callback)
+        {
+            if (Animations.ContainsKey(anim))
+            {
+                CurrAnimation = Animations[anim].Copy();
+                CurrAnimation.Callback = callback;
+                CurrAnimType = anim;
+            }
         }
 
         public virtual void TransformMove(Vector destination, int numSteps)

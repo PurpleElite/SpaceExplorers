@@ -78,67 +78,67 @@ namespace SpaceExplorers
             if (Velocity.Magnitude > 0.1)
             {
                 // Moving
-                if (AnimationType.IsMovement(_animation))
+                if (AnimationType.IsMovement(CurrAnimation))
                 {
-                    _runFrame = _animation.CurrentIndex;
+                    _runFrame = CurrAnimation.StepCount;
                 }
                 Direction direction = (Direction)((Math.Round(Velocity.GetDirection() / 45) * 45) % 360);
                 switch (direction)
                 {
                     case Direction.E:
-                        if (Animations.ContainsKey(AnimType.RunE))
+                        if (Animations.ContainsKey(AnimType.RunE) && CurrAnimType != AnimType.RunE)
                         {
-                            _animation = Animations[AnimType.RunE];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunE);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.NE:
-                        if (Animations.ContainsKey(AnimType.RunNE))
+                        if (Animations.ContainsKey(AnimType.RunNE) && CurrAnimType != AnimType.RunNE)
                         {
-                            _animation = Animations[AnimType.RunNE];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunNE);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.N:
-                        if (Animations.ContainsKey(AnimType.RunN))
+                        if (Animations.ContainsKey(AnimType.RunN) && CurrAnimType != AnimType.RunN)
                         {
-                            _animation = Animations[AnimType.RunN];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunN);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.NW:
-                        if (Animations.ContainsKey(AnimType.RunNW))
+                        if (Animations.ContainsKey(AnimType.RunNW) && CurrAnimType != AnimType.RunNW)
                         {
-                            _animation = Animations[AnimType.RunNW];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunNW);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.W:
-                        if (Animations.ContainsKey(AnimType.RunW))
+                        if (Animations.ContainsKey(AnimType.RunW) && CurrAnimType != AnimType.RunW)
                         {
-                            _animation = Animations[AnimType.RunW];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunW);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.SW:
-                        if (Animations.ContainsKey(AnimType.RunSW))
+                        if (Animations.ContainsKey(AnimType.RunSW) && CurrAnimType != AnimType.RunSW)
                         {
-                            _animation = Animations[AnimType.RunSW];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunSW);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.S:
-                        if (Animations.ContainsKey(AnimType.RunS))
+                        if (Animations.ContainsKey(AnimType.RunS) && CurrAnimType != AnimType.RunS)
                         {
-                            _animation = Animations[AnimType.RunS];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunS);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                     case Direction.SE:
-                        if (Animations.ContainsKey(AnimType.RunSE))
+                        if (Animations.ContainsKey(AnimType.RunSE) && CurrAnimType != AnimType.RunSE)
                         {
-                            _animation = Animations[AnimType.RunSE];
-                            _animation.CurrentIndex = _runFrame;
+                            PlayAnimation(AnimType.RunSE);
+                            CurrAnimation.SkipFrames(_runFrame);
                         }
                         break;
                 }
@@ -150,25 +150,11 @@ namespace SpaceExplorers
                 // Determine facing and play appropriate idle animation
                 if (_horizontalHeading == Direction.E)
                 {
-                    if (Animations.ContainsKey(AnimType.IdleE))
-                    {
-                        _animation = Animations[AnimType.IdleE];
-                    }
-                    else
-                    {
-                        _animation = null;
-                    }
+                    PlayAnimation(AnimType.IdleE);
                 }
                 if (_horizontalHeading == Direction.W)
                 {
-                    if (Animations.ContainsKey(AnimType.IdleW))
-                    {
-                        _animation = Animations[AnimType.IdleW];
-                    }
-                    else
-                    {
-                        _animation = null;
-                    }
+                    PlayAnimation(AnimType.IdleW);
                 }
             }
         }
@@ -227,14 +213,6 @@ namespace SpaceExplorers
                     break;
             }
             return interactArea;
-        }
-
-        public void SetAnimation(AnimType animType)
-        {
-            if(Animations.ContainsKey(animType))
-            {
-                _animation = Animations[animType];
-            }
         }
 
         //Key Presses

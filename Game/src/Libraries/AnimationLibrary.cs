@@ -61,11 +61,14 @@ namespace SpaceExplorers
                     if (Enum.IsDefined(typeof(AnimType), type))
                     {
                         Animation newAnim = new Animation(animName, type);
-                        string[] frames = Directory.GetFiles(animDir, "frame*");
-                        for (int i = 0; i < frames.Length; i++)
+                        List<Animation.Frame> frames = new List<Animation.Frame>();
+                        //TODO: Add support for multiple segments
+                        Animation.AnimationSegment segment = new Animation.AnimationSegment(true);
+                        string[] frameIDs = Directory.GetFiles(animDir, "frame*");
+                        for (int i = 0; i < frameIDs.Length; i++)
                         {
                             // Get the texture
-                            string framePath = frames[i];
+                            string framePath = frameIDs[i];
                             string frameName = Path.GetFileName(framePath);
                             TextureLibrary.Textures.Add(animName + frameName, new Texture(new Image(framePath)));
                             // Determine the step duration
@@ -82,14 +85,17 @@ namespace SpaceExplorers
                             {
                                 stepDuration = defaultStepDuration;
                             }
-                            // Add the frame to the animation
-                            newAnim.Frames.Add(new Animation.Frame(animName + frameName, stepDuration));
+                            frames.Add(new Animation.Frame(animName + frameName, stepDuration));
                         }
+                        //Make a segment out of the frames
+                        segment.Frames = frames;
+                        //Add segment to animation
+                        newAnim.Segments.Add(segment);
                         Animations.Add(newAnim.ID, newAnim);
                     }
                     else
                     {
-                        Console.WriteLine("Error! No Animation tyoe defined for animation " + animName);
+                        Console.WriteLine("Error! No Animation type defined for animation " + animName);
                     }
                 }
                 catch (IOException)
